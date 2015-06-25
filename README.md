@@ -1,5 +1,1 @@
-# warehouse-inventory-system
-
-
- Warehouse inventory system
- ==========================
+#  Warehouse inventory system
