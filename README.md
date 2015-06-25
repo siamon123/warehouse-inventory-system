@@ -22,4 +22,4 @@ Installing this application is fairly easy, just follow these steps:
 
 5. Good luck!  
 
-![Smaller icon](https://c4.staticflickr.com/4/3853/18519134214_cc0fd8dfd7_b.jpg " Warehouse inventory system ")
+![Smaller icon](https://c1.staticflickr.com/1/359/18955747829_1d03925c20_h.jpg" Warehouse inventory system ")
