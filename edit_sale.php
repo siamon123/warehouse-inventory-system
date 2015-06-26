@@ -26,7 +26,7 @@ if(!$sale){
           $sql .= " product_id= '{$p_id}',qty={$s_qty},price='{$s_total}',date='{$s_date}'";
           $sql .= " WHERE id ='{$sale['id']}'";
           $result = mysqli_query($con,$sql);
-          if( $result ){
+          if( $result && mysqli_affected_rows($con) == 1){
                     update_product_qty($s_qty,$p_id);
                     $session->msg('s',"Sale updated.");
                     redirect('edit_sale.php?id='.$sale['id'], false);

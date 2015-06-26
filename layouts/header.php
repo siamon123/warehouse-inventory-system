@@ -34,10 +34,16 @@
           </a>
         </li>
         <li>
-          <a href="home.php">
+          <a href="#" class="submenu-toggle">
             <i class="glyphicon glyphicon-user"></i>
-            <span>User</span>
+            <span>User Management</span>
           </a>
+          <ul class="nav submenu">
+            <li><a href="users.php">Manage user</a> </li>
+             <li><a href="edit_account.php">My account</a> </li>
+             <li><a href="change_password.php">Change Password</a> </li>
+             <li><a href="add_user.php">New User</a> </li>
+         </ul>
         </li>
         <li>
           <a href="categorie.php" >

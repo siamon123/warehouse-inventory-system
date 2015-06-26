@@ -59,10 +59,10 @@ $results = '';
    </div>
   </div>
  </div>
+ <?php if($results): ?>
  <div class="btn-group pull-right">
    <a onclick="print_invoice('printableArea')" class="btn btn-success">Print</a>
  </div>
-<?php if($results): ?>
  <div id="printReport">
    <div class="row">
      <div class="col-md-12">

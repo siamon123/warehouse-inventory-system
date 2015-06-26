@@ -6,14 +6,14 @@
 
 <div class="login-page">
     <div class="text-center">
-       <h1>Wel come</h1>
+       <h1>Welcome</h1>
        <p>Sign in to start your session</p>
      </div>
      <?php echo display_msg($msg); ?>
       <form method="post" action="auth.php" class="clearfix">
         <div class="form-group">
               <label for="username" class="control-label">Username</label>
-              <input type="email" class="form-control" name="username" placeholder="Username">
+              <input type="name" class="form-control" name="username" placeholder="Username">
         </div>
         <div class="form-group">
             <label for="Password" class="control-label">Password</label>

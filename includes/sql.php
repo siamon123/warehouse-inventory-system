@@ -38,6 +38,7 @@
 
    return false;
   }
+
   /*--------------------------------------------------------------*/
   /* Function for Current login user
   /*--------------------------------------------------------------*/
@@ -59,6 +60,41 @@
 
     }
     return $current_user;
+  }
+
+  /*--------------------------------------------------------------*/
+  /* Function for Find user by id
+  /*--------------------------------------------------------------*/
+  function find_by_user_id($id){
+    global $con;
+    $cat_id = (int)$id;
+    $sql = "SELECT * FROM users WHERE id='{$id}'";
+    $row = mysqli_query($con,$sql);
+    check_query($row);
+    if($result = mysqli_fetch_assoc($row)){
+      return $result;
+    } else {
+      return null;
+    }
+
+  }
+  /*--------------------------------------------------------------*/
+  /* Function for Find all user
+  /*--------------------------------------------------------------*/
+  function all_users(){
+    global $con;
+    $sql  = "SELECT * ";
+    $sql .= "FROM users";
+    $sql .= " ORDER BY name";
+    $cat_result = mysqli_query($con,$sql);
+    if($cat_result){
+
+      $results = while_loop($cat_result);
+
+    } else {
+      check_query($cat_result);
+    }
+    return $results;
   }
   /*--------------------------------------------------------------*/
   /* Function for Count users by id
@@ -94,7 +130,7 @@
   /*--------------------------------------------------------------*/
   function find_by_cat_id($id){
     global $con;
-    $cat_id = remove_junk($id);
+    $cat_id = remove_junk((int)$id);
     $sql = "SELECT * FROM categories WHERE id='{$id}'";
     $row = mysqli_query($con,$sql);
     check_query($row);
@@ -111,7 +147,6 @@
 
   function count_categories(){
     global $con;
-
     $sql    = "SELECT COUNT(id) AS total_cat FROM categories";
     $result = mysqli_query($con,$sql);
     $result = mysqli_fetch_assoc($result);
@@ -262,7 +297,7 @@
    $sql .= "SUM(qty) AS Totalquantity";
    $sql .= " FROM sale_views";
    $sql .= " GROUP BY name";
-   $sql .= " ORDER BY name ASC";
+   $sql .= " ORDER BY qty DESC";
    $result = mysqli_query($con,$sql);
    if($result){
      $results = while_loop($result);
