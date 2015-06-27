@@ -108,6 +108,19 @@
     return $result;
   }
   /*--------------------------------------------------------------*/
+  /* Function for Delete user by id
+  /*--------------------------------------------------------------*/
+
+  function delete_user_by_id($id){
+    global $con;
+    $delete_id = real_escape($id);
+         $sql  = "DELETE FROM users";
+         $sql .= " WHERE id='{$id}'";
+         $sql .= " LIMIT 1";
+       $result = mysqli_query($con,$sql);
+       return (mysqli_affected_rows($con) == 1) ? true : false;
+  }
+  /*--------------------------------------------------------------*/
   /* Function for Find all categories
   /*--------------------------------------------------------------*/
   function all_catgories(){
@@ -152,7 +165,19 @@
     $result = mysqli_fetch_assoc($result);
     return $result;
   }
+  /*--------------------------------------------------------------*/
+  /* Function for Delete categorie by id
+  /*--------------------------------------------------------------*/
 
+  function delete_categorie_by_id($id){
+    global $con;
+    $delete_id = real_escape($id);
+         $sql  = "DELETE FROM categories";
+         $sql .= " WHERE id='{$id}'";
+         $sql .= " LIMIT 1";
+       $result = mysqli_query($con,$sql);
+       return (mysqli_affected_rows($con) == 1) ? true : false;
+  }
   /*--------------------------------------------------------------*/
   /* Function for All products
   /*--------------------------------------------------------------*/
@@ -244,6 +269,19 @@
    }
    return $results;
  }
+ /*--------------------------------------------------------------*/
+ /* Function for Delete Product by id
+ /*--------------------------------------------------------------*/
+
+ function delete_product_by_id($id){
+   global $con;
+   $delete_id = real_escape($id);
+        $sql  = "DELETE FROM products";
+        $sql .= " WHERE id='{$id}'";
+        $sql .= " LIMIT 1";
+      $result = mysqli_query($con,$sql);
+      return (mysqli_affected_rows($con) == 1) ? true : false;
+ }
   /*--------------------------------------------------------------*/
   /* Function for Find all sales
   /*--------------------------------------------------------------*/
@@ -307,7 +345,20 @@
    return $results;
  }
  /*--------------------------------------------------------------*/
- /* Function for Display Recent product Added
+ /* Function for Delete sale by id
+ /*--------------------------------------------------------------*/
+
+ function delete_sale_by_id($id){
+   global $con;
+   $delete_id = real_escape($id);
+        $sql  = "DELETE FROM sales";
+        $sql .= " WHERE id='{$id}'";
+        $sql .= " LIMIT 1";
+      $result = mysqli_query($con,$sql);
+      return (mysqli_affected_rows($con) == 1) ? true : false;
+ }
+ /*--------------------------------------------------------------*/
+ /* Function for Display Recent sale
  /*--------------------------------------------------------------*/
 function find_recent_sale_added(){
   global $con;
@@ -320,7 +371,9 @@ function find_recent_sale_added(){
   }
   return $results;
 }
-
+/*--------------------------------------------------------------*/
+/* Function for Generate sales report by two dates
+/*--------------------------------------------------------------*/
 function find_sale_by_dates($start_date,$end_date){
   global $con;
   $start_date  = date("Y-m-d", strtotime($start_date));
@@ -335,7 +388,6 @@ function find_sale_by_dates($start_date,$end_date){
   $sql .= " WHERE s.date BETWEEN '{$start_date}' AND '{$end_date}'";
   $sql .= " GROUP BY DATE(s.date),p.name";
   $sql .= " ORDER BY DATE(s.date) DESC";
-
   $result = mysqli_query($con,$sql);
   if($result){
     $results = while_loop($result);
@@ -344,4 +396,5 @@ function find_sale_by_dates($start_date,$end_date){
   }
   return $results;
 }
+
 ?>

@@ -10,15 +10,12 @@
   }
 ?>
 <?php
-$id = (int)$d_user['id'];
-$sql = "DELETE FROM users WHERE id='{$id}'";
-$result = mysqli_query($con,$sql);
-if($result && mysqli_affected_rows($con) == 1){
-  $session->msg("s","User deleted.");
-  redirect('users.php');
-} else {
-  $session->msg("d","user deletion failed.");
-  redirect('users.php');
-}
-
+  $delete_id = delete_user_by_id((int)$d_user['id']);
+  if($delete_id){
+      $session->msg("s","User deleted.");
+      redirect('users.php');
+  } else {
+      $session->msg("d","user deletion failed.");
+      redirect('sales.php');
+  }
 ?>

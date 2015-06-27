@@ -69,8 +69,10 @@ function redirect($url, $permanent = false)
 
     exit();
 }
-
-function add($totals){
+/*--------------------------------------------------------------*/
+/* Function for find out total saleing price, buying price and profit
+/*--------------------------------------------------------------*/
+function total_price($totals){
    $sum = 0;
    $sub = 0;
    foreach($totals as $total ){

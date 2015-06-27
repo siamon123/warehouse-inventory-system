@@ -10,15 +10,12 @@
   }
 ?>
 <?php
-$id = (int)$d_sale['id'];
-$sql = "DELETE FROM sales WHERE id='{$id}'";
-$result = mysqli_query($con,$sql);
-if($result && mysqli_affected_rows($con) == 1){
-  $session->msg("s","sale deleted.");
-  redirect('sales.php');
-} else {
-  $session->msg("d","sale deletion failed.");
-  redirect('sales.php');
-}
-
+  $delete_id = delete_sale_by_id((int)$d_sale['id']);
+  if($delete_id){
+      $session->msg("s","sale deleted.");
+      redirect('sales.php');
+  } else {
+      $session->msg("d","sale deletion failed.");
+      redirect('sales.php');
+  }
 ?>

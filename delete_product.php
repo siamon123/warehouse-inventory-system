@@ -10,15 +10,12 @@
   }
 ?>
 <?php
-$id = (int)$product['id'];
-$sql = "DELETE FROM products WHERE id='{$id}'";
-$result = mysqli_query($con,$sql);
-if($result && mysqli_affected_rows($con) == 1){
-  $session->msg("s","Products deleted.");
-  redirect('product.php');
-} else {
-  $session->msg("d","Products deletion failed.");
-  redirect('product.php');
-}
-
+  $delete_id = delete_product_by_id((int)$product['id']);
+  if($delete_id){
+      $session->msg("s","Products deleted.");
+      redirect('product.php');
+  } else {
+      $session->msg("d","Products deletion failed.");
+      redirect('product.php');
+  }
 ?>

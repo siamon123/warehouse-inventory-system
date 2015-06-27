@@ -10,15 +10,12 @@
   }
 ?>
 <?php
-$id = $categorie['id'];
-$sql = "DELETE FROM categories WHERE id='{$id}'";
-$result = mysqli_query($con,$sql);
-if($result && mysqli_affected_rows($con) == 1){
-  $session->msg("s","Categorie deleted.");
-  redirect('categorie.php');
-} else {
-  $session->msg("d","Categorie deletion failed.");
-  redirect('categorie.php');
-}
-
+  $delete_id = delete_categorie_by_id((int)$categorie['id']);
+  if($delete_id){
+      $session->msg("s","Categorie deleted.");
+      redirect('categorie.php');
+  } else {
+      $session->msg("d","Categorie deletion failed.");
+      redirect('categorie.php');
+  }
 ?>

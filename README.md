@@ -3,7 +3,7 @@ The application was initially created by **Siamon Hasan**, useing [php](http:php
 
 
 I created this web application for beginner php programmer and who found difficulties to creating a inventory system.
-This application more then 2 years old. I cleaned and modified few files. i also working on sales report section, when it's ready i will push it.
+This application more then 2 years old. I cleaned and modified few files.
 
 If you find any bug, and a fix for that bug, please leave a comment on the github page for this project and i will push the change into the master branch.
  
