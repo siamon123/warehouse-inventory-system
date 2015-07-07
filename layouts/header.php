@@ -18,7 +18,7 @@
          Simple Inventory
       </div>
       <div id="logout" class="pull-right clearfix">
-        <a href="logout">
+        <a href="logout.php">
          <span class="glyphicon glyphicon-off"></span> Logout
         </a>
       </div>
