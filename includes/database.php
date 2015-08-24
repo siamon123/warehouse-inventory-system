@@ -1,8 +1,6 @@
 <?php
-  include_once('config.php');
-
+ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.php");
   $con = mysqli_connect(DB_SERVER,DB_USER,DB_PASS);
-
   if(!$con){
     die('<pre> Database Connection Failed '.mysqli_connect_error().'</pre>' );
   } else {
