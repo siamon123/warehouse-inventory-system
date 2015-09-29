@@ -1,8 +1,20 @@
 <?php
- // Database Constants
-  define('DB_SERVER','localhost');
-  define('DB_USER','root');
-  define('DB_PASS','Yourpassword');
-  define('DB_NAME','Your_database_name');
+/*
+|--------------------------------------------------------------------------
+| OWSA-INV V2
+|--------------------------------------------------------------------------
+| Author: Siamon Hasan
+| Project Name: OSWA-INV
+| Version: v2
+| Offcial page: http://oswapp.com/
+| facebook Page: https://www.facebook.com/oswapp
+|
+|
+|
+*/
+  define( 'DB_HOST', 'localhost' );          // Set database host
+  define( 'DB_USER', 'admin' );             // Set database user
+  define( 'DB_PASS', 'root' );             // Set database password
+  define( 'DB_NAME', 'oswa_inv' );        // Set database name
 
 ?>

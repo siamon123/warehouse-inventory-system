@@ -1,11 +1,14 @@
 <?php
-  $page_title = 'All sale';
+  $page_title = 'Daily Sales';
   require_once('includes/load.php');
   // Checkin What level user has permission to view this page
    page_require_level(3);
 ?>
+
 <?php
-$sales = find_all_sale();
+ $year  = date('Y');
+ $month = date('m');
+ $sales = dailySales($year,$month);
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
@@ -19,11 +22,8 @@ $sales = find_all_sale();
         <div class="panel-heading clearfix">
           <strong>
             <span class="glyphicon glyphicon-th"></span>
-            <span>All Sales</span>
+            <span>Daily Sales</span>
           </strong>
-          <div class="pull-right">
-            <a href="add_sale.php" class="btn btn-primary">Add sale</a>
-          </div>
         </div>
         <div class="panel-body">
           <table class="table table-bordered table-striped">
@@ -31,10 +31,9 @@ $sales = find_all_sale();
               <tr>
                 <th class="text-center" style="width: 50px;">#</th>
                 <th> Product name </th>
-                <th class="text-center" style="width: 15%;"> Quantity</th>
+                <th class="text-center" style="width: 15%;"> Quantity sold</th>
                 <th class="text-center" style="width: 15%;"> Total </th>
                 <th class="text-center" style="width: 15%;"> Date </th>
-                <th class="text-center" style="width: 100px;"> Actions </th>
              </tr>
             </thead>
            <tbody>
@@ -43,18 +42,8 @@ $sales = find_all_sale();
                <td class="text-center"><?php echo count_id();?></td>
                <td><?php echo remove_junk($sale['name']); ?></td>
                <td class="text-center"><?php echo (int)$sale['qty']; ?></td>
-               <td class="text-center"><?php echo remove_junk($sale['price']); ?></td>
+               <td class="text-center"><?php echo remove_junk($sale['total_saleing_price']); ?></td>
                <td class="text-center"><?php echo $sale['date']; ?></td>
-               <td class="text-center">
-                  <div class="btn-group">
-                     <a href="edit_sale.php?id=<?php echo (int)$sale['id'];?>" class="btn btn-warning btn-xs"  title="Edit" data-toggle="tooltip">
-                       <span class="glyphicon glyphicon-edit"></span>
-                     </a>
-                     <a href="delete_sale.php?id=<?php echo (int)$sale['id'];?>" class="btn btn-danger btn-xs"  title="Delete" data-toggle="tooltip">
-                       <span class="glyphicon glyphicon-trash"></span>
-                     </a>
-                  </div>
-               </td>
              </tr>
              <?php endforeach;?>
            </tbody>
@@ -63,4 +52,5 @@ $sales = find_all_sale();
       </div>
     </div>
   </div>
+
 <?php include_once('layouts/footer.php'); ?>

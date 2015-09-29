@@ -1,381 +1,291 @@
 <?php
   require_once('includes/load.php');
-  /*--------------------------------------------------------------*/
-  /* Function for check mysqli query
-  /*--------------------------------------------------------------*/
-  function check_query($result){
-    if(!$result){
-      die("Database query failed");
-    }
-  }
-/*--------------------------------------------------------------*/
-/* Function for While loop
-/*--------------------------------------------------------------*/
-  function while_loop($loop){
-    $results = array();
-    while ($result = mysqli_fetch_array($loop)) {
-       $results[] = $result;
-    }
-    return $results;
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for user login
-  /*--------------------------------------------------------------*/
-  function authenticate($username='', $password='') {
-    global $con;
-    $username = real_escape($username);
-    $password = real_escape($password);
 
-    $sql  = sprintf("SELECT id, username, password FROM users WHERE username ='%s' LIMIT 1", $username);
-    $result = mysqli_query($con,$sql);
-    if(mysqli_num_rows($result)){
-      $user = mysqli_fetch_assoc($result);
+/*--------------------------------------------------------------*/
+/* Function for find all database table rows by table name
+/*--------------------------------------------------------------*/
+function find_all($table) {
+   global $db;
+   if(tableExists($table))
+   {
+     return find_by_sql("SELECT * FROM ".$db->escape($table));
+   }
+}
+/*--------------------------------------------------------------*/
+/* Function for Perform queries
+/*--------------------------------------------------------------*/
+function find_by_sql($sql)
+{
+  global $db;
+  $result = $db->query($sql);
+  $result_set = $db->while_loop($result);
+ return $result_set;
+}
+/*--------------------------------------------------------------*/
+/*  Function for Find data from table by id
+/*--------------------------------------------------------------*/
+function find_by_id($table,$id)
+{
+  global $db;
+  $id = (int)$id;
+    if(tableExists($table)){
+          $sql = $db->query("SELECT * FROM {$db->escape($table)} WHERE id='{$db->escape($id)}' LIMIT 1");
+          if($result = $db->fetch_assoc($sql))
+            return $result;
+          else
+            return null;
+     }
+}
+/*--------------------------------------------------------------*/
+/* Function for Delete data from table by id
+/*--------------------------------------------------------------*/
+function delete_by_id($table,$id)
+{
+  global $db;
+  if(tableExists($table))
+   {
+    $sql = "DELETE FROM ".$db->escape($table);
+    $sql .= " WHERE id=". $db->escape($id);
+    $sql .= " LIMIT 1";
+    $db->query($sql);
+    return ($db->affected_rows() === 1) ? true : false;
+   }
+}
+/*--------------------------------------------------------------*/
+/* Function for Count id  By table name
+/*--------------------------------------------------------------*/
+
+function count_by_id($table){
+  global $db;
+  if(tableExists($table))
+  {
+    $sql    = "SELECT COUNT(id) AS total FROM ".$db->escape($table);
+    $result = $db->query($sql);
+     return($db->fetch_assoc($result));
+  }
+}
+/*--------------------------------------------------------------*/
+/* Determine if database table exists
+/*--------------------------------------------------------------*/
+function tableExists($table){
+  global $db;
+  $table_exit = $db->query('SHOW TABLES FROM '.DB_NAME.' LIKE "'.$db->escape($table).'"');
+      if($table_exit) {
+        if($db->num_rows($table_exit) > 0)
+              return true;
+         else
+              return false;
+      }
+  }
+ /*--------------------------------------------------------------*/
+ /* Login with the data provided in $_POST,
+ /* coming from the login form.
+/*--------------------------------------------------------------*/
+  function authenticate($username='', $password='') {
+    global $db;
+    $username = $db->escape($username);
+    $password = $db->escape($password);
+    $sql  = sprintf("SELECT id,username,password,user_level FROM users WHERE username ='%s' LIMIT 1", $username);
+    $result = $db->query($sql);
+    if($db->num_rows($result)){
+      $user = $db->fetch_assoc($result);
       $password_request = sha1($password);
       if($password_request === $user['password'] ){
         return $user['id'];
       }
     }
-
    return false;
   }
 
   /*--------------------------------------------------------------*/
-  /* Function for Current login user
+  /* Find current log in user by session id
   /*--------------------------------------------------------------*/
   function current_user(){
-    static $current_user;
-    global $con;
-    if(!$current_user){
-     if(isset($_SESSION['user_id'])){
-       $user_id = intval($_SESSION['user_id']);
-       $sql  = "SELECT * FROM ";
-       $sql .= "users WHERE ";
-       $sql .= " id=".real_escape($user_id);
-       $result = mysqli_query($con, $sql);
-       if(mysqli_num_rows($result)){
-         $current_user = mysqli_fetch_assoc($result);
-         return $current_user;
-       }
-     }
-
-    }
+      static $current_user;
+      global $db;
+      if(!$current_user){
+         if(isset($_SESSION['user_id'])):
+             $user_id = intval($_SESSION['user_id']);
+             $current_user = find_by_id('users',$user_id);
+        endif;
+      }
     return $current_user;
   }
-
   /*--------------------------------------------------------------*/
-  /* Function for Find user by id
+  /* Find all user by
+  /* Joining users table and user gropus table
   /*--------------------------------------------------------------*/
-  function find_by_user_id($id){
-    global $con;
-    $cat_id = (int)$id;
-    $sql = "SELECT * FROM users WHERE id='{$id}'";
-    $row = mysqli_query($con,$sql);
-    check_query($row);
-    if($result = mysqli_fetch_assoc($row)){
+  function find_all_user(){
+      global $db;
+      $results = array();
+      $sql = "SELECT u.id,u.name,u.username,u.user_level,u.status,u.last_login,";
+      $sql .="g.group_name ";
+      $sql .="FROM users u ";
+      $sql .="LEFT JOIN user_groups g ";
+      $sql .="ON g.group_level=u.user_level ORDER BY u.name ASC";
+      $result = find_by_sql($sql);
       return $result;
-    } else {
-      return null;
-    }
-
   }
   /*--------------------------------------------------------------*/
-  /* Function for Find all user
+  /* Function to update the last log in of a user
   /*--------------------------------------------------------------*/
-  function all_users(){
-    global $con;
-    $sql  = "SELECT * ";
-    $sql .= "FROM users";
-    $sql .= " ORDER BY name";
-    $cat_result = mysqli_query($con,$sql);
-    if($cat_result){
 
-      $results = while_loop($cat_result);
+ function updateLastLogIn($user_id)
+	{
+		global $db;
+    $date = make_date();
+    $sql = "UPDATE users SET last_login='{$date}' WHERE id ='{$user_id}' LIMIT 1";
+    $result = $db->query($sql);
+    return ($result && $db->affected_rows() === 1 ? true : false);
+	}
 
-    } else {
-      check_query($cat_result);
-    }
-    return $results;
+  /*--------------------------------------------------------------*/
+  /* Find all Group name
+  /*--------------------------------------------------------------*/
+  function find_by_groupName($val)
+  {
+    global $db;
+    $sql = "SELECT group_name FROM user_groups WHERE group_name = '{$db->escape($val)}' LIMIT 1 ";
+    $result = $db->query($sql);
+    return($db->num_rows($result) === 0 ? true : false);
   }
   /*--------------------------------------------------------------*/
-  /* Function for Count users by id
+  /* Find group level
   /*--------------------------------------------------------------*/
-
-  function count_users(){
-    global $con;
-    $sql    = "SELECT COUNT(id) AS total_user FROM users";
-    $result = mysqli_query($con,$sql);
-    $result = mysqli_fetch_assoc($result);
-    return $result;
+  function find_by_groupLevel($level)
+  {
+    global $db;
+    $sql = "SELECT group_level FROM user_groups WHERE group_level = '{$db->escape($level)}' LIMIT 1 ";
+    $result = $db->query($sql);
+    return($db->num_rows($result) === 0 ? true : false);
   }
   /*--------------------------------------------------------------*/
-  /* Function for Delete user by id
+  /* Function for cheaking which user level has access to page
+  /*--------------------------------------------------------------*/
+   function page_require_level($require_level){
+     global $session;
+     $current_user = current_user();
+     $login_level = find_by_groupLevel($current_user['user_level']);
+     //if user not login
+     if (!$session->isUserLoggedIn(true)):
+            $session->msg('d','Please login...');
+            redirect('index.php', false);
+      //if Group status Deactive
+     elseif($login_level['group_status'] === '0'):
+           $session->msg('d','This level user has been band!');
+           redirect('home.php',false);
+      //cheackin log in User level and Require level is Less than or equal to
+     elseif($current_user['user_level'] <= (int)$require_level):
+              return true;
+      else:
+            $session->msg("d", "Sorry! you dont have permission to view the page.");
+            redirect('home.php', false);
+        endif;
+
+     }
+   /*--------------------------------------------------------------*/
+   /* Function for Finding all product name
+   /* JOIN with categorie  and media database table
+   /*--------------------------------------------------------------*/
+  function join_product_table(){
+     global $db;
+     $sql  =" SELECT p.id,p.name,p.quantity,p.buy_price,p.sale_price,p.media_id,p.date,c.name";
+    $sql  .=" AS categorie,m.file_name AS image";
+    $sql  .=" FROM products p";
+    $sql  .=" LEFT JOIN categories c ON c.id = p.categorie_id";
+    $sql  .=" LEFT JOIN media m ON m.id = p.media_id";
+    $sql  .=" ORDER BY p.id ASC";
+    return find_by_sql($sql);
+
+   }
+  /*--------------------------------------------------------------*/
+  /* Function for Finding all product name
+  /* Request coming from ajax.php for auto suggest
   /*--------------------------------------------------------------*/
 
-  function delete_user_by_id($id){
-    global $con;
-    $delete_id = real_escape($id);
-         $sql  = "DELETE FROM users";
-         $sql .= " WHERE id='{$id}'";
-         $sql .= " LIMIT 1";
-       $result = mysqli_query($con,$sql);
-       return (mysqli_affected_rows($con) == 1) ? true : false;
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for Find all categories
-  /*--------------------------------------------------------------*/
-  function all_catgories(){
-    global $con;
-    $sql  = "SELECT * ";
-    $sql .= "FROM categories";
-    $sql .= " ORDER BY name";
-    $cat_result = mysqli_query($con,$sql);
-    if($cat_result){
+   function find_product_by_title($product_name){
+     global $db;
+     $p_name = remove_junk($db->escape($product_name));
+     $sql = "SELECT name FROM products WHERE name like '%$p_name%' LIMIT 5";
+     $result = find_by_sql($sql);
+     return $result;
+   }
 
-      $results = while_loop($cat_result);
-
-    } else {
-      check_query($cat_result);
-    }
-    return $results;
-  }
   /*--------------------------------------------------------------*/
-  /* Function for Find categorie by id
+  /* Function for Finding all product info by product title
+  /* Request coming from ajax.php
   /*--------------------------------------------------------------*/
-  function find_by_cat_id($id){
-    global $con;
-    $cat_id = remove_junk((int)$id);
-    $sql = "SELECT * FROM categories WHERE id='{$id}'";
-    $row = mysqli_query($con,$sql);
-    check_query($row);
-    if($result = mysqli_fetch_assoc($row)){
-      return $result;
-    } else {
-      return null;
-    }
-
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for Count categorie by id
-  /*--------------------------------------------------------------*/
-
-  function count_categories(){
-    global $con;
-    $sql    = "SELECT COUNT(id) AS total_cat FROM categories";
-    $result = mysqli_query($con,$sql);
-    $result = mysqli_fetch_assoc($result);
-    return $result;
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for Delete categorie by id
-  /*--------------------------------------------------------------*/
-
-  function delete_categorie_by_id($id){
-    global $con;
-    $delete_id = real_escape($id);
-         $sql  = "DELETE FROM categories";
-         $sql .= " WHERE id='{$id}'";
-         $sql .= " LIMIT 1";
-       $result = mysqli_query($con,$sql);
-       return (mysqli_affected_rows($con) == 1) ? true : false;
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for All products
-  /*--------------------------------------------------------------*/
-  function find_all_product(){
-    global $con;
-    $sql  = " SELECT * FROM product_views";
-    $result = mysqli_query($con,$sql);
-    if($result){
-
-      $results = while_loop($result);
-
-    } else {
-      check_query($result);
-    }
-    return $results;
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for Find product by id
-  /*--------------------------------------------------------------*/
-  function find_by_product_id($id){
-    global $con;
-    $p_id = (int)$id;
-    $sql  = " SELECT * FROM products";
-    $sql .= " WHERE ";
-    $sql .= "id = '{$p_id}'";
-    $row = mysqli_query($con,$sql);
-    check_query($row);
-    if($result = mysqli_fetch_assoc($row)){
-      return $result;
-    } else {
-      return null;
-    }
-
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for Count products by id
-  /*--------------------------------------------------------------*/
-
-  function count_products(){
-    global $con;
-    $sql    = "SELECT COUNT(id) AS total_pro FROM products";
-    $result = mysqli_query($con,$sql);
-    $result = mysqli_fetch_assoc($result);
-    return $result;
-  }
-  /*--------------------------------------------------------------*/
-  /* Function for Find product name by product title
-  /*--------------------------------------------------------------*/
-  function find_product_views_by_name($title){
-    global $con;
-    $sql  = "SELECT * FROM product_views ";
+  function find_all_product_info_by_title($title){
+    global $db;
+    $sql  = "SELECT * FROM products ";
     $sql .= " WHERE name ='{$title}'";
     $sql .=" LIMIT 1";
-    $result = mysqli_query($con,$sql);
-    if($result){
-      $results = while_loop($result);
-    } else {
-      check_query($result);
-    }
-    return $results;
+    return find_by_sql($sql);
   }
 
   /*--------------------------------------------------------------*/
   /* Function for Update product quantity
   /*--------------------------------------------------------------*/
   function update_product_qty($qty,$p_id){
-    global $con;
+    global $db;
     $qty = (int) $qty;
     $id  = (int)$p_id;
     $sql = "UPDATE products SET quantity=quantity -'{$qty}' WHERE id = '{$id}'";
-    $result = mysqli_query($con,$sql);
-    if(mysqli_affected_rows($con) == 1){
-      return true;
-    } else {
-      return false;
-    }
+    $result = $db->query($sql);
+    return($db->affected_rows() === 1 ? true : false);
+
   }
   /*--------------------------------------------------------------*/
   /* Function for Display Recent product Added
   /*--------------------------------------------------------------*/
- function find_recent_product_added(){
-   global $con;
-   $sql = "SELECT id,name,categorie_name,sale_price FROM product_views ORDER BY name DESC LIMIT 10";
-   $result = mysqli_query($con,$sql);
-   if($result){
-     $results = while_loop($result);
-   } else {
-     check_query($result);
-   }
-   return $results;
- }
- /*--------------------------------------------------------------*/
- /* Function for Delete Product by id
- /*--------------------------------------------------------------*/
-
- function delete_product_by_id($id){
-   global $con;
-   $delete_id = real_escape($id);
-        $sql  = "DELETE FROM products";
-        $sql .= " WHERE id='{$id}'";
-        $sql .= " LIMIT 1";
-      $result = mysqli_query($con,$sql);
-      return (mysqli_affected_rows($con) == 1) ? true : false;
- }
-  /*--------------------------------------------------------------*/
-  /* Function for Find all sales
-  /*--------------------------------------------------------------*/
- function find_all_sale(){
-   global $con;
-   $sql = "SELECT * FROM sale_views";
-   $result = mysqli_query($con,$sql);
-   if($result){
-     $results = while_loop($result);
-   } else {
-     check_query($result);
-   }
-   return $results;
- }
- /*--------------------------------------------------------------*/
- /* Function for Find sale by id
- /*--------------------------------------------------------------*/
- function find_by_sale_id($id){
-   global $con;
-   $s_id = (int)$id;
-   $sql  = " SELECT * FROM sales";
-   $sql .= " WHERE ";
-   $sql .= "id = '{$s_id}'";
-   $row = mysqli_query($con,$sql);
-   check_query($row);
-   if($result = mysqli_fetch_assoc($row)){
-     return $result;
-   } else {
-     return null;
-   }
-
- }
- /*--------------------------------------------------------------*/
- /* Function for Count sales by id
- /*--------------------------------------------------------------*/
-
- function count_sales(){
-   global $con;
-   $sql    = "SELECT COUNT(id) AS total_sale FROM sales";
-   $result = mysqli_query($con,$sql);
-   $result = mysqli_fetch_assoc($result);
-   return $result;
+ function find_recent_product_added($limit){
+   global $db;
+   $sql   = " SELECT p.id,p.name,p.sale_price,p.media_id,c.name AS categorie,";
+   $sql  .= "m.file_name AS image FROM products p";
+   $sql  .= " LEFT JOIN categories c ON c.id = p.categorie_id";
+   $sql  .= " LEFT JOIN media m ON m.id = p.media_id";
+   $sql  .= " ORDER BY p.id DESC LIMIT ".$db->escape((int)$limit);
+   return find_by_sql($sql);
  }
  /*--------------------------------------------------------------*/
  /* Function for Find Highest saleing Product
  /*--------------------------------------------------------------*/
- function find_higest_sale_product(){
-   global $con;
-   $sql  = "SELECT name,";
-   $sql .= "COUNT(name) AS Totalsold,";
-   $sql .= "SUM(qty) AS Totalquantity";
-   $sql .= " FROM sale_views";
-   $sql .= " GROUP BY name";
-   $sql .= " ORDER BY qty DESC";
-   $result = mysqli_query($con,$sql);
-   if($result){
-     $results = while_loop($result);
-   } else {
-     check_query($result);
-   }
-   return $results;
+ function find_higest_saleing_product($limit){
+   global $db;
+   $sql  = "SELECT p.name, COUNT(s.product_id) AS totalSold, SUM(s.qty) AS totalQty";
+   $sql .= " FROM sales s";
+   $sql .= " LEFT JOIN products p ON p.id = s.product_id ";
+   $sql .= " GROUP BY s.product_id";
+   $sql .= " ORDER BY SUM(s.qty) DESC LIMIT ".$db->escape((int)$limit);
+   return $db->query($sql);
  }
  /*--------------------------------------------------------------*/
- /* Function for Delete sale by id
+ /* Function for find all sales
  /*--------------------------------------------------------------*/
-
- function delete_sale_by_id($id){
-   global $con;
-   $delete_id = real_escape($id);
-        $sql  = "DELETE FROM sales";
-        $sql .= " WHERE id='{$id}'";
-        $sql .= " LIMIT 1";
-      $result = mysqli_query($con,$sql);
-      return (mysqli_affected_rows($con) == 1) ? true : false;
+ function find_all_sale(){
+   global $db;
+   $sql  = "SELECT s.id,s.qty,s.price,s.date,p.name";
+   $sql .= " FROM sales s";
+   $sql .= " LEFT JOIN products p ON s.product_id = p.id";
+   $sql .= " ORDER BY s.date DESC";
+   return find_by_sql($sql);
  }
  /*--------------------------------------------------------------*/
  /* Function for Display Recent sale
  /*--------------------------------------------------------------*/
-function find_recent_sale_added(){
-  global $con;
-  $sql = "SELECT id,name,date,price FROM sale_views ORDER BY date DESC LIMIT 20";
-  $result = mysqli_query($con,$sql);
-  if($result){
-    $results = while_loop($result);
-  } else {
-    check_query($result);
-  }
-  return $results;
+function find_recent_sale_added($limit){
+  global $db;
+  $sql  = "SELECT s.id,s.qty,s.price,s.date,p.name";
+  $sql .= " FROM sales s";
+  $sql .= " LEFT JOIN products p ON s.product_id = p.id";
+  $sql .= " ORDER BY s.date DESC LIMIT ".$db->escape((int)$limit);
+  return find_by_sql($sql);
 }
 /*--------------------------------------------------------------*/
 /* Function for Generate sales report by two dates
 /*--------------------------------------------------------------*/
 function find_sale_by_dates($start_date,$end_date){
-  global $con;
+  global $db;
   $start_date  = date("Y-m-d", strtotime($start_date));
   $end_date    = date("Y-m-d", strtotime($end_date));
   $sql  = "SELECT s.date, p.name,p.sale_price,p.buy_price,";
@@ -388,13 +298,36 @@ function find_sale_by_dates($start_date,$end_date){
   $sql .= " WHERE s.date BETWEEN '{$start_date}' AND '{$end_date}'";
   $sql .= " GROUP BY DATE(s.date),p.name";
   $sql .= " ORDER BY DATE(s.date) DESC";
-  $result = mysqli_query($con,$sql);
-  if($result){
-    $results = while_loop($result);
-  } else {
-    check_query($result);
-  }
-  return $results;
+  return $db->query($sql);
+}
+/*--------------------------------------------------------------*/
+/* Function for Generate Daily sales report
+/*--------------------------------------------------------------*/
+function  dailySales($year,$month){
+  global $db;
+  $sql  = "SELECT s.qty,";
+  $sql .= " DATE_FORMAT(s.date, '%Y-%m-%e') AS date,p.name,";
+  $sql .= "SUM(p.sale_price * s.qty) AS total_saleing_price";
+  $sql .= " FROM sales s";
+  $sql .= " LEFT JOIN products p ON s.product_id = p.id";
+  $sql .= " WHERE DATE_FORMAT(s.date, '%Y-%m' ) = '{$year}-{$month}'";
+  $sql .= " GROUP BY DATE_FORMAT( s.date,  '%e' ),s.product_id";
+  return find_by_sql($sql);
+}
+/*--------------------------------------------------------------*/
+/* Function for Generate Monthly sales report
+/*--------------------------------------------------------------*/
+function  monthlySales($year){
+  global $db;
+  $sql  = "SELECT s.qty,";
+  $sql .= " DATE_FORMAT(s.date, '%Y-%m-%e') AS date,p.name,";
+  $sql .= "SUM(p.sale_price * s.qty) AS total_saleing_price";
+  $sql .= " FROM sales s";
+  $sql .= " LEFT JOIN products p ON s.product_id = p.id";
+  $sql .= " WHERE DATE_FORMAT(s.date, '%Y' ) = '{$year}'";
+  $sql .= " GROUP BY DATE_FORMAT( s.date,  '%c' ),s.product_id";
+  $sql .= " ORDER BY date_format(s.date, '%c' ) ASC";
+  return find_by_sql($sql);
 }
 
 ?>

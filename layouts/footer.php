@@ -7,4 +7,4 @@
   </body>
 </html>
 
-<?php if (isset($connection)) {  mysqli_close($con); } ?>
+<?php if(isset($db)) { $db->db_disconnect(); } ?>

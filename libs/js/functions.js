@@ -43,14 +43,10 @@ function suggetion() {
      });
 
  }
-
-
   $('#sug-form').submit(function(e) {
-
       var formData = {
           'p_name' : $('input[name=title]').val()
       };
-
         // process the form
         $.ajax({
             type        : 'POST',
@@ -68,11 +64,8 @@ function suggetion() {
             }).fail(function() {
                 $('#product_info').html(data).show();
             });
-
-
       e.preventDefault();
   });
-
   function total(){
     $('#product_info input').change(function(e)  {
             var price = +$('input[name=price]').val() || 0;
@@ -81,13 +74,21 @@ function suggetion() {
                 $('input[name=total]').val(total.toFixed(2));
     });
   }
+
   $(document).ready(function() {
+
+    //tooltip
+    $('[data-toggle="tooltip"]').tooltip();
+
     $('.submenu-toggle').click(function () {
        $(this).parent().children('ul.submenu').toggle(200);
     });
+    //suggetion for finding product names
     suggetion();
+    // Callculate total ammont
     total();
-    $('.datePicker')
+
+    $('.datepicker')
         .datepicker({
             format: 'yyyy-mm-dd',
             todayHighlight: true,

@@ -1,21 +1,15 @@
 <?php
   require_once('includes/load.php');
-  if (!$session->isUserLoggedIn(true)) { redirect('index.php', false);}
+  // Checkin What level user has permission to view this page
+   page_require_level(1);
 ?>
 <?php
-  $d_user = find_by_user_id((int)$_GET['id']);
-  if(!$d_user){
-    $session->msg("d","Missing user id.");
-    redirect('users.php');
-  }
-?>
-<?php
-  $delete_id = delete_user_by_id((int)$d_user['id']);
+  $delete_id = delete_by_id('users',(int)$_GET['id']);
   if($delete_id){
       $session->msg("s","User deleted.");
       redirect('users.php');
   } else {
-      $session->msg("d","user deletion failed.");
-      redirect('sales.php');
+      $session->msg("d","User deletion failed Or Missing Prm.");
+      redirect('users.php');
   }
 ?>

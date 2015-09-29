@@ -1,16 +1,22 @@
 <?php
+$page_title = 'Sales Report';
 $results = '';
   require_once('includes/load.php');
-  if (!$session->isUserLoggedIn(true)) { redirect('index.php', false);}
+  // Checkin What level user has permission to view this page
+   page_require_level(3);
 ?>
 <?php
   if(isset($_POST['submit'])){
     $req_dates = array('start-date','end-date');
     validate_fields($req_dates);
     if(empty($errors)){
-      $start_date   = remove_junk(real_escape($_POST['start-date']));
-      $end_date     = remove_junk(real_escape($_POST['end-date']));
+      $start_date   = remove_junk($db->escape($_POST['start-date']));
+      $end_date     = remove_junk($db->escape($_POST['end-date']));
       $results      = find_sale_by_dates($start_date,$end_date);
+      if(!$result){
+        $session->msg("d",'Sorry No Result has been found');
+        redirect('sales_report.php', false);
+      }
     } else {
       $session->msg("d", $errors);
       redirect('sales_report.php', false);

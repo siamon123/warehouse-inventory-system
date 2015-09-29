@@ -82,5 +82,40 @@ function total_price($totals){
    }
    return array($sum,$profit);
 }
+/*--------------------------------------------------------------*/
+/* Function for Readable date time
+/*--------------------------------------------------------------*/
+function read_date($str){
+     if($str)
+      return date('F j, Y, g:i:s a', strtotime($str));
+     else
+      return null;
+  }
+/*--------------------------------------------------------------*/
+/* Function for  Readable Make date time
+/*--------------------------------------------------------------*/
+function make_date(){
+  return strftime("%Y-%m-%d %H:%M:%S", time());
+}
+/*--------------------------------------------------------------*/
+/* Function for  Readable date time
+/*--------------------------------------------------------------*/
+function count_id(){
+  static $count = 1;
+  return $count++;
+}
+/*--------------------------------------------------------------*/
+/* Function for Creting random string
+/*--------------------------------------------------------------*/
+function randString($length = 5)
+{
+  $str='';
+  $cha = "0123456789abcdefghijklmnopqrstuvwxyz";
 
- ?>
+  for($x=0; $x<$length; $x++)
+   $str .= $cha[mt_rand(0,strlen($cha))];
+  return $str;
+}
+
+
+?>

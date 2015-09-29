@@ -2,40 +2,36 @@
   require_once('includes/load.php');
   if (!$session->isUserLoggedIn(true)) { redirect('index.php', false);}
 ?>
+
 <?php
-$html = '';
- if(isset($_POST['product_name']) && strlen($_POST['product_name']))
- {
+ // Auto suggetion
+    $html = '';
+   if(isset($_POST['product_name']) && strlen($_POST['product_name']))
+   {
+     $products = find_product_by_title($_POST['product_name']);
+     if($products){
+        foreach ($products as $product):
+           $html .= "<li class=\"list-group-item\">";
+           $html .= $product['name'];
+           $html .= "</li>";
+         endforeach;
+      } else {
 
-    $p_name = remove_junk(real_escape($_POST['product_name']));
-    $sql = "SELECT name FROM products WHERE name like '%$p_name%' LIMIT 3 ";
-    $result = mysqli_query($con,$sql);
-
-    if(mysqli_num_rows($result) > 0){
-
-      while($row = mysqli_fetch_array($result)){
-        $html .= "<li class=\"list-group-item\">";
-        $html .= $row['name'];
+        $html .= '<li onClick=\"fill(\''.addslashes().'\')\" class=\"list-group-item\">';
+        $html .= 'Not found';
         $html .= "</li>";
+
       }
 
-    } else {
-
-      $html .= '<li onClick=\"fill(\''.addslashes().'\')\" class=\"list-group-item\">';
-      $html .= 'Not found';
-      $html .= "</li>";
-
-    }
-
-    echo json_encode($html);
- }
+      echo json_encode($html);
+   }
  ?>
  <?php
-
+ // find all product
   if(isset($_POST['p_name']) && strlen($_POST['p_name']))
   {
-    $product_title = remove_junk(real_escape($_POST['p_name']));
-    if($results = find_product_views_by_name($product_title)){
+    $product_title = remove_junk($db->escape($_POST['p_name']));
+    if($results = find_all_product_info_by_title($product_title)){
         foreach ($results as $result) {
 
           $html .= "<tr>";

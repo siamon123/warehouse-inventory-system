@@ -1,16 +1,17 @@
 <?php
   require_once('includes/load.php');
-  if (!$session->isUserLoggedIn(true)) { redirect('index.php', false);}
+  // Checkin What level user has permission to view this page
+  page_require_level(3);
 ?>
 <?php
-  $d_sale = find_by_sale_id((int)$_GET['id']);
+  $d_sale = find_by_id('sales',(int)$_GET['id']);
   if(!$d_sale){
     $session->msg("d","Missing sale id.");
     redirect('sales.php');
   }
 ?>
 <?php
-  $delete_id = delete_sale_by_id((int)$d_sale['id']);
+  $delete_id = delete_by_id('sales',(int)$d_sale['id']);
   if($delete_id){
       $session->msg("s","sale deleted.");
       redirect('sales.php');
