@@ -1,24 +1,23 @@
-#  Warehouse inventory system
+## Oswa - inv
+
+
+![OSWA-INV v2 image](http://oswapp.com/uploads/b/oswa-inv-V2.jpg " Warehouse inventory system ")
+#Warehouse inventory system
+- - - - 
+
 The application was initially created by **Siamon Hasan**, useing [php](http:php.net), [mysql](https://www.mysql.com) and [bootstrap](http://getbootstrap.com).
 
 
-This is an inventory system web application.
+OSWA-INV is a web based Inventory System, that will allow you to keep tracking of the quantity buying and selling price of the products existing in your warehouse or business. When creating a new products, you can set a quantity,buying and selling price.
+
+****
 
 If you find any bug, and a fix for that bug, please leave a comment on the github page for this project and i will push the change into the master branch.
- 
-## OWSA On Facebook
 
 
-Keep a touch with us on facebook for more project [Like And Support Us ON Facebook](https://www.facebook.com/oswapp "Facebook")
+### Installing this application is fairly easy, just follow these steps:
+****
 
-## More about project
-
-
-By visiting [oswapp.com](http://oswapp.com "OSWA")
-
-## Installation
-
-Installing this application is fairly easy, just follow these steps:
 
 1. Download the latest version with git (`git clone https://github.com/siamon123/warehouse-inventory-system.git`) 
 
@@ -26,7 +25,7 @@ Installing this application is fairly easy, just follow these steps:
 
 3. Modify the includes/config.php and change the variables to match your host, database, username and passwords.
  
-4. Change all Floder permission inside uploads folder either add them to group call www if available or 777.
+4. Change all Folder permission inside uploads folder either add them to group call `www` if available or `777`.
 
 5. Then loging by typing **username** and **password**:
  
@@ -38,4 +37,13 @@ Installing this application is fairly easy, just follow these steps:
 
 6. Good luck!  
 
-![OSWA-INV v2 image](http://oswapp.com/uploads/b/oswa-inv-V2.jpg " Warehouse inventory system ")
+- - - -
+ 
+## DON'T FORGET TO GIVE US FEEDBACK
+
+- - - -
+
+Like  [@OSWA](https://www.facebook.com/oswapp) on Facebook for more project.
+
+Don't forget to visit [oswapp.com](http://oswapp.com "OSWA")
+
