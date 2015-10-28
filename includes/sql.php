@@ -96,6 +96,27 @@ function tableExists($table){
     }
    return false;
   }
+  /*--------------------------------------------------------------*/
+  /* Login with the data provided in $_POST,
+  /* coming from the login_v2.php form.
+  /* If you used this method then remove authenticate function.
+ /*--------------------------------------------------------------*/
+   function authenticate_v2($username='', $password='') {
+     global $db;
+     $username = $db->escape($username);
+     $password = $db->escape($password);
+     $sql  = sprintf("SELECT id,username,password,user_level FROM users WHERE username ='%s' LIMIT 1", $username);
+     $result = $db->query($sql);
+     if($db->num_rows($result)){
+       $user = $db->fetch_assoc($result);
+       $password_request = sha1($password);
+       if($password_request === $user['password'] ){
+         return $user;
+       }
+     }
+    return false;
+   }
+
 
   /*--------------------------------------------------------------*/
   /* Find current log in user by session id
