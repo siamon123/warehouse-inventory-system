@@ -18,17 +18,17 @@ if(!$sale){
     $req_fields = array('title','quantity','price','total', 'date' );
     validate_fields($req_fields);
         if(empty($errors)){
-          $p_id      = real_escape((int)$product['id']);
-          $s_qty     = real_escape((int)$_POST['quantity']);
-          $s_total   = real_escape($_POST['total']);
-          $date      = real_escape($_POST['date']);
+          $p_id      = $db->escape((int)$product['id']);
+          $s_qty     = $db->escape((int)$_POST['quantity']);
+          $s_total   = $db->escape($_POST['total']);
+          $date      = $db->escape($_POST['date']);
           $s_date    = date("Y-m-d", strtotime($date));
 
           $sql  = "UPDATE sales SET";
           $sql .= " product_id= '{$p_id}',qty={$s_qty},price='{$s_total}',date='{$s_date}'";
           $sql .= " WHERE id ='{$sale['id']}'";
-          $result = mysqli_query($con,$sql);
-          if( $result && mysqli_affected_rows($con) == 1){
+          $result = $db->query($sql);
+          if( $result && $db->affected_rows() === 1){
                     update_product_qty($s_qty,$p_id);
                     $session->msg('s',"Sale updated.");
                     redirect('edit_sale.php?id='.$sale['id'], false);
@@ -89,7 +89,7 @@ if(!$sale){
                   <input type="text" class="form-control" name="total" value="<?php echo remove_junk($sale['price']); ?>">
                 </td>
                 <td id="s_date">
-                  <input type="date" class="form-control datePicker"  name="date" data-date-format="" value="<?php echo read_date($sale['date']); ?>">
+                  <input type="date" class="form-control datepicker" name="date" data-date-format="" value="<?php echo remove_junk($sale['date']); ?>">
                 </td>
                 <td>
                   <button type="submit" name="update_sale" class="btn btn-primary">Update sale</button>

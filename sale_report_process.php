@@ -9,18 +9,16 @@ $results = '';
   if(isset($_POST['submit'])){
     $req_dates = array('start-date','end-date');
     validate_fields($req_dates);
-    if(empty($errors)){
+
+    if(empty($errors)):
       $start_date   = remove_junk($db->escape($_POST['start-date']));
       $end_date     = remove_junk($db->escape($_POST['end-date']));
       $results      = find_sale_by_dates($start_date,$end_date);
-      if(!$result){
-        $session->msg("d",'Sorry No Result has been found');
-        redirect('sales_report.php', false);
-      }
-    } else {
+    else:
       $session->msg("d", $errors);
       redirect('sales_report.php', false);
-    }
+    endif;
+
   } else {
     $session->msg("d", "Select dates");
     redirect('sales_report.php', false);
@@ -82,7 +80,7 @@ $results = '';
     <div class="page-break">
        <div class="sale-head pull-right">
            <h1>Sales Report</h1>
-           <strong><?php if(isset($start_date)){echo $start_date;}?> To <?php if(isset($end_date)){echo $end_date;}?> </strong>
+           <strong><?php if(isset($start_date)){ echo $start_date;}?> To <?php if(isset($end_date)){echo $end_date;}?> </strong>
        </div>
       <table class="table table-border">
         <thead>
@@ -125,11 +123,12 @@ $results = '';
         </tfoot>
       </table>
     </div>
-  <?php else:
-    $session->msg("d", "Sorry no sales has been found. ");
-    redirect('sales_report.php', false);
+  <?php
+    else:
+        $session->msg("d", "Sorry no sales has been found. ");
+        redirect('sales_report.php', false);
+     endif;
   ?>
-<?php endif; ?>
 </body>
 </html>
-<?php if (isset($connection)) {  mysqli_close($con); } ?>
+<?php if(isset($db)) { $db->db_disconnect(); } ?>
