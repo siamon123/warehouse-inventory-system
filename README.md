@@ -1,9 +1,9 @@
 ## Oswa - inv
 
 
-![OSWA-INV v2 image](http://oswapp.com/uploads/b/oswa-inv-V2.jpg " Warehouse inventory system ")
+![OSWA-INV v2 image](https://scontent-iad3-1.xx.fbcdn.net/v/t31.0-8/12045296_896994067005023_5505146103193104549_o.jpg?oh=4afd029c1486604d29f672d76becb8bc&oe=5921F70A " Warehouse inventory system ")
 #Warehouse inventory system
-- - - - 
+- - - -
 
 The application was initially created by **Siamon Hasan**, useing [php](http:php.net), [mysql](https://www.mysql.com) and [bootstrap](http://getbootstrap.com).
 
@@ -19,16 +19,16 @@ If you find any bug, and a fix for that bug, please leave a comment on the githu
 ****
 
 
-1. Download the latest version with git (`git clone https://github.com/siamon123/warehouse-inventory-system.git`) 
+1. Download the latest version with git (`git clone https://github.com/siamon123/warehouse-inventory-system.git`)
 
 2. Import/load oswa_inv.sql into your mysql database. This should set up the basic structure of the database system.
 
 3. Modify the includes/config.php and change the variables to match your host, database, username and passwords.
- 
+
 4. Change all Folder permission inside uploads folder either add them to group call `www` if available or `777`.
 
 5. Then loging by typing **username** and **password**:
- 
+
 
    Administrator        | Special User           | Default User
    ---------------------| -----------------------| -------------------
@@ -38,7 +38,7 @@ If you find any bug, and a fix for that bug, please leave a comment on the githu
 6. Good luck!  
 
 - - - -
- 
+
 ## DON'T FORGET TO GIVE US FEEDBACK
 
 - - - -
@@ -46,4 +46,3 @@ If you find any bug, and a fix for that bug, please leave a comment on the githu
 Like  [@OSWA](https://www.facebook.com/oswapp) on Facebook for more project.
 
 Don't forget to visit [oswapp.com](http://oswapp.com "OSWA")
-
