@@ -120,6 +120,20 @@
                       <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price">
                       <span class="input-group-addon">.00</span>
                    </div>
+                     <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-usd"></i>
+                      </span>
+                      <input type="number" class="form-control" name="manufactured_date" placeholder="manufactured date">
+                      <span class="input-group-addon">.00</span>
+                   </div>
+                     <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-usd"></i>
+                      </span>
+                      <input type="number" class="form-control" name="expiry_price" placeholder="expiry price">
+                      <span class="input-group-addon">.00</span>
+                   </div>
                   </div>
                </div>
               </div>
