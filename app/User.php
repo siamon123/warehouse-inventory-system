@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'username', 'email', 'password',
     ];
 
     /**
@@ -33,7 +33,7 @@ class User extends Authenticatable
      * @return \App\User
      */
     public function createFromRequest($request) {
-        return null;
+        return $this->create($this->transformRequest($request));
     }
     
     /**
@@ -42,6 +42,22 @@ class User extends Authenticatable
      * @return \App\User
      */
     public function updateFromRequest($request) {
-        return null;
+        $this->update($this->transformRequest($request));
+        
+        return $this;
     }
+    
+    /**
+     * @param $request
+     *
+     * @return array
+     */
+    protected function transformRequest($request) {
+        return [
+            'name'     => $request->name,
+            'username' => $request->username,
+            'email'    => $request->email,
+            'password' => $request->password
+        ];
+}
 }
