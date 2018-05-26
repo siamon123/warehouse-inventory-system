@@ -26,4 +26,22 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    /**
+     * @param $request
+     *
+     * @return \App\User
+     */
+    public function saveFromRequest($request) {
+        return null;
+    }
+    
+    /**
+     * @param $request
+     *
+     * @return \App\User
+     */
+    public function updateFromRequest($request) {
+        return null;
+    }
 }

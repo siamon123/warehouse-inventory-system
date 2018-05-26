@@ -12,9 +12,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        return view('user.index', ['users' => User::paginate($request->per_page)]);
     }
 
     /**
@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
     }
 
     /**
@@ -35,7 +35,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::saveFromRequest($request);
+    
+        return redirect(route('user.show', ['user' => $user]));
     }
 
     /**
@@ -46,7 +48,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('user.show', ['user' => User::findOrFail($id)]);
     }
 
     /**
@@ -57,7 +59,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('user.edit', ['user' => User::findOrFail($id)]);
     }
 
     /**
@@ -69,7 +71,8 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->updateFromRequest($request);
     }
 
     /**
