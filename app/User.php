@@ -32,7 +32,7 @@ class User extends Authenticatable
      *
      * @return \App\User
      */
-    public function saveFromRequest($request) {
+    public function createFromRequest($request) {
         return null;
     }
     
