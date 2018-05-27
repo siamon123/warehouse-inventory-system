@@ -17,4 +17,4 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::resource('user', 'UserController');
+Route::resource('user', 'UserController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
