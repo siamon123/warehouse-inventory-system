@@ -25,6 +25,8 @@ ActiveAdmin.register Product do
         column(:name) {product.name}
         column(:categories) {product.categories.map(&:name).compact}
       end
+    end
+    panel 'Image' do
       img src: product.media_src, style: 'max-height:100px'
     end
     panel 'Financial Details' do
