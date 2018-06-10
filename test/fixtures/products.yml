@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  quantity: 1
+  buy_price: 9.99
+  sell_price: 9.99
+  media_src: MyString
+
+two:
+  name: MyString
+  quantity: 1
+  buy_price: 9.99
+  sell_price: 9.99
+  media_src: MyString
