@@ -11,7 +11,7 @@ ActiveAdmin.register Product do
       input :categories, :as => :check_boxes, :collection => Category.all
       input :media_src
     end
-    inputs 'Financial' do
+    inputs 'Financial Details' do
       input :buy_price, :as => :number, :type => :decimal
       input :sell_price, :as => :number, :type => :decimal
       input :quantity, :as => :number, :type => :integer
@@ -20,17 +20,19 @@ ActiveAdmin.register Product do
   end
 
   show do |product|
-    div do
-      h5 product.name
-      product.categories.each do |category|
-        h6 category.name
+    panel 'Details' do
+      table_for product do
+        column(:name) {product.name}
+        column(:categories) {product.categories.map(&:name).compact}
       end
-      h5 product.media_src
+      img src: product.media_src, style: 'max-height:100px'
     end
-    div do
-      h5 product.buy_price
-      h5 product.sell_price
-      h5 product.quantity
+    panel 'Financial Details' do
+      table_for product do
+        column 'Buy Price', :buy_price
+        column 'Sell Price', :sell_price
+        column 'Quantity', :quantity
+      end
     end
   end
 
