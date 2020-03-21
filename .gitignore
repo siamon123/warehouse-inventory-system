@@ -1,0 +1,5 @@
+# Eliminate Macintosh flotsam.
+
+**/.DS_Store
+
+.gitignore
