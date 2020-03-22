@@ -1,50 +1,29 @@
-# Oswa - inv
+# Inventory-Management-System 
 
+___
 
-![OSWA-INV v2 image](https://scontent-iad3-1.xx.fbcdn.net/v/t31.0-8/12045296_896994067005023_5505146103193104549_o.jpg?oh=4afd029c1486604d29f672d76becb8bc&oe=5921F70A " Warehouse inventory system ")
+### Then:
 
-# Warehouse inventory system
+The application was initially created by Siamon Hasan, using:
+ * php - http://php.net
+ * mysql - https://www.mysql.com
+ * bootstrap - http://getbootstrap.com
 
-- - - -
+### Now:
 
-The application was initially created by **Siamon Hasan**, useing [php](http:php.net), [mysql](https://www.mysql.com) and [bootstrap](http://getbootstrap.com).
+Being in need of a means for keeping a moderate level of organization around some stuff my family's trying to sell on eBay produced the need for me to seek out something like this.
 
+It seems that the original repo was created and then left to stand on its own.
+I created this fork in an effort to bend it to my needs while providing the originator of the app his due.
 
-OSWA-INV is a web based Inventory System, that will allow you to keep tracking of the quantity buying and selling price of the products existing in your warehouse or business. When creating a new products, you can set a quantity,buying and selling price.
+I'm now going to make changes as I see fit without pushing them upstream since that seems to be crapped out.
 
-****
+___
 
-If you find any bug, and a fix for that bug, please leave a comment on the github page for this project and i will push the change into the master branch.
+## Next stop:
 
+From here, if you want, visit the project wiki to learn how I came up with the plan I'm following.
 
-### Installing this application is fairly easy, just follow these steps:
-****
+## After that:
 
-
-1. Download the latest version with git (`git clone https://github.com/siamon123/warehouse-inventory-system.git`)
-
-2. Import/load oswa_inv.sql into your mysql database. This should set up the basic structure of the database system.
-
-3. Modify the includes/config.php and change the variables to match your host, database, username and passwords.
-
-4. Change all Folder permission inside uploads folder either add them to group call `www` if available or `777`.
-
-5. Then loging by typing **username** and **password**:
-
-
-   Administrator        | Special User           | Default User
-   ---------------------| -----------------------| -------------------
-   **Username** : admin | **Username** : special | **Username** : user
-   **Password** : admin | **Password** : special | **Password** : user
-
-6. Good luck!  
-
-- - - -
-
-## DON'T FORGET TO GIVE US FEEDBACK
-
-- - - -
-
-Like  [@OSWA](https://www.facebook.com/oswapp) on Facebook for more project.
-
-Don't forget to visit [oswapp.com](http://oswapp.com "OSWA")
+You'll want to start on the "INSTALLING" document.
