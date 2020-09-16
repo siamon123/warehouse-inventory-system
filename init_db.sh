@@ -1,0 +1,1 @@
+docker-compose exec -T db mysql oswa_inv < migrations/oswa_inv.sql
