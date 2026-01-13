@@ -4,7 +4,7 @@
 ?>
 
 <?php
- // Auto suggetion
+ // Auto-sugerencia
     $html = '';
    if(isset($_POST['product_name']) && strlen($_POST['product_name']))
    {
@@ -18,7 +18,7 @@
       } else {
 
         $html .= '<li onClick=\"fill(\''.addslashes().'\')\" class=\"list-group-item\">';
-        $html .= 'Not found';
+        $html .= 'No encontrado';
         $html .= "</li>";
 
       }
@@ -27,7 +27,7 @@
    }
  ?>
  <?php
- // find all product
+ // encontrar todos los productos
   if(isset($_POST['p_name']) && strlen($_POST['p_name']))
   {
     $product_title = remove_junk($db->escape($_POST['p_name']));
@@ -51,13 +51,13 @@
           $html  .= "<input type=\"date\" class=\"form-control datePicker\" name=\"date\" data-date data-date-format=\"yyyy-mm-dd\">";
           $html  .= "</td>";
           $html  .= "<td>";
-          $html  .= "<button type=\"submit\" name=\"add_sale\" class=\"btn btn-primary\">Add sale</button>";
+          $html  .= "<button type=\"submit\" name=\"add_sale\" class=\"btn btn-primary\">Agregar venta</button>";
           $html  .= "</td>";
           $html  .= "</tr>";
 
         }
     } else {
-        $html ='<tr><td>product name not resgister in database</td></tr>';
+        $html ='<tr><td>Nombre de producto no registrado en la base de datos</td></tr>';
     }
 
     echo json_encode($html);

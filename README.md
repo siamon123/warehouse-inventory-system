@@ -1,48 +1,77 @@
 ## Oswa - inv
 
+![OSWA-INV v2 image](https://scontent-iad3-1.xx.fbcdn.net/v/t31.0-8/12045296_896994067005023_5505146103193104549_o.jpg?oh=4afd029c1486604d29f672d76becb8bc&oe=5921F70A " Sistema de Inventario de Almacén ")
 
-![OSWA-INV v2 image](https://scontent-iad3-1.xx.fbcdn.net/v/t31.0-8/12045296_896994067005023_5505146103193104549_o.jpg?oh=4afd029c1486604d29f672d76becb8bc&oe=5921F70A " Warehouse inventory system ")
-#Warehouse inventory system
-- - - -
+# Sistema de Inventario de Almacén
 
-The application was initially created by **Siamon Hasan**, useing [php](http:php.net), [mysql](https://www.mysql.com) and [bootstrap](http://getbootstrap.com).
+---
 
+La aplicación fue creada inicialmente por **Siamon Hasan**, utilizando [php](http:php.net), [mysql](https://www.mysql.com) y [bootstrap](http://getbootstrap.com).
 
-OSWA-INV is a web based Inventory System, that will allow you to keep tracking of the quantity buying and selling price of the products existing in your warehouse or business. When creating a new products, you can set a quantity,buying and selling price.
+OSWA-INV es un sistema de inventario basado en la web que le permitirá realizar un seguimiento de la cantidad y el precio de compra y venta de los productos existentes en su almacén o negocio. Al crear nuevos productos, puede establecer la cantidad, el precio de compra y el precio de venta.
 
-****
+---
 
-If you find any bug, and a fix for that bug, please leave a comment on the github page for this project and i will push the change into the master branch.
+Si encuentra algún error y una solución para ese error, deje un comentario en la página de GitHub de este proyecto y aplicaré el cambio a la rama principal.
 
+---
 
-### Installing this application is fairly easy, just follow these steps:
-****
+## Actualizaciones de Seguridad y Refactorización (Reciente)
 
+Se han realizado mejoras significativas en la arquitectura y seguridad del sistema:
 
-1. Download the latest version with git (`git clone https://github.com/siamon123/warehouse-inventory-system.git`)
+### 1. Migración a PDO y Consultas Preparadas
 
-2. Import/load oswa_inv.sql into your mysql database. This should set up the basic structure of the database system.
+Se ha refactorizado la capa de base de datos para utilizar **PDO (PHP Data Objects)** en lugar de la extensión obsoleta `mysqli`.
 
-3. Modify the includes/config.php and change the variables to match your host, database, username and passwords.
+- **Seguridad**: Implementación de **sentencias preparadas** en todas las consultas para eliminar el riesgo de ataques de **Inyección SQL**.
+- **Compatibilidad**: Mayor facilidad para cambiar de motor de base de datos en el futuro.
 
-4. Change all Folder permission inside uploads folder either add them to group call `www` if available or `777`.
+### 2. Mejora en el Hashing de Contraseñas
 
-5. Then loging by typing **username** and **password**:
+Se ha actualizado el mecanismo de almacenamiento de contraseñas, migrando de `SHA1` (inseguro) a algoritmos modernos.
 
+- **Función**: Ahora el sistema utiliza `password_hash()` y `password_verify()` con el algoritmo `BCRYPT` por defecto.
+- **Migración Progresiva**: El sistema mantiene compatibilidad con las contraseñas antiguas, actualizándolas automáticamente al nuevo formato cuando el usuario inicia sesión.
 
-   Administrator        | Special User           | Default User
-   ---------------------| -----------------------| -------------------
-   **Username** : admin | **Username** : special | **Username** : user
-   **Password** : admin | **Password** : special | **Password** : user
+### 3. Implementación de Protección CSRF (Cross-Site Request Forgery)
 
-6. Good luck!  
+Se ha implementado una capa de protección contra ataques de falsificación de solicitudes en sitios cruzados.
 
-- - - -
+- **Tokens por Sesión**: Generación y validación de tokens únicos para cada sesión de usuario.
+- **Protección Global**: Verificación automática en todas las peticiones `POST` del sistema.
+- **Soporte AJAX**: Integración mediante etiquetas meta y configuración automática para peticiones jQuery AJAX.
+- **Formularios Protegidos**: Actualización de todos los formularios del sistema (login, productos, ventas, usuarios, etc.) para incluir el campo de seguridad.
 
-## DON'T FORGET TO GIVE US FEEDBACK
+---
 
-- - - -
+### Instalar esta aplicación es bastante sencillo, solo siga estos pasos:
 
-Like  [@OSWA](https://www.facebook.com/oswapp) on Facebook for more project.
+---
 
-Don't forget to visit [oswapp.com](http://oswapp.com "OSWA")
+1. Descargue la última versión con git (`git clone https://github.com/siamon123/warehouse-inventory-system.git`)
+
+2. Importe/cargue `oswa_inv.sql` en su base de datos MySQL. Esto debería configurar la estructura básica del sistema de base de datos.
+
+3. Modifique `includes/config.php` y cambie las variables para que coincidan con su servidor, base de datos, nombre de usuario y contraseñas.
+
+4. Cambie todos los permisos de las carpetas dentro de la carpeta `uploads`, ya sea agregándolas al grupo llamado `www` si está disponible o configurándolas en `777`.
+
+5. Luego inicie sesión escribiendo el **nombre de usuario** (username) y la **contraseña** (password):
+
+   | Administrador         | Usuario Especial        | Usuario por Defecto  |
+   | --------------------- | ----------------------- | -------------------- |
+   | **Usuario**: admin    | **Usuario**: special    | **Usuario**: user    |
+   | **Contraseña**: admin | **Contraseña**: special | **Contraseña**: user |
+
+6. ¡Buena suerte!
+
+---
+
+## NO OLVIDE DARNOS SU OPINIÓN
+
+---
+
+Siga a [@OSWA](https://www.facebook.com/oswapp) en Facebook para más proyectos.
+
+No olvide visitar [oswapp.com](http://oswapp.com "OSWA")

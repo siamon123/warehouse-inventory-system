@@ -6,21 +6,21 @@ class  Media {
   public $fileName;
   public $fileType;
   public $fileTempPath;
-  //Set destination for upload
+  // Establecer el destino de la carga
   public $userPath = SITE_ROOT.DS.'..'.DS.'uploads/users';
   public $productPath = SITE_ROOT.DS.'..'.DS.'uploads/products';
 
 
   public $errors = array();
   public $upload_errors = array(
-    0 => 'There is no error, the file uploaded with success',
-    1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
-    2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
-    3 => 'The uploaded file was only partially uploaded',
-    4 => 'No file was uploaded',
-    6 => 'Missing a temporary folder',
-    7 => 'Failed to write file to disk.',
-    8 => 'A PHP extension stopped the file upload.'
+    0 => 'No hay errores, el archivo se cargó con éxito',
+    1 => 'El archivo cargado excede la directiva upload_max_filesize en php.ini',
+    2 => 'El archivo cargado excede la directiva MAX_FILE_SIZE que se especificó en el formulario HTML',
+    3 => 'El archivo se cargó solo parcialmente',
+    4 => 'No se cargó ningún archivo',
+    6 => 'Falta una carpeta temporal',
+    7 => 'Error al escribir el archivo en el disco.',
+    8 => 'Una extensión de PHP detuvo la carga del archivo.'
   );
   public$upload_extensions = array(
    'gif',
@@ -38,13 +38,13 @@ class  Media {
   public function upload($file)
   {
     if(!$file || empty($file) || !is_array($file)):
-      $this->errors[] = "No file was uploaded.";
+      $this->errors[] = "No se cargó ningún archivo.";
       return false;
     elseif($file['error'] != 0):
       $this->errors[] = $this->upload_errors[$file['error']];
       return false;
     elseif(!$this->file_ext($file['name'])):
-      $this->errors[] = 'File not right format ';
+      $this->errors[] = 'Formato de archivo incorrecto';
       return false;
     else:
       $this->imageInfo = getimagesize($file['tmp_name']);
@@ -61,37 +61,37 @@ class  Media {
     if(!empty($this->errors)):
       return false;
     elseif(empty($this->fileName) || empty($this->fileTempPath)):
-      $this->errors[] = "The file location was not available.";
+      $this->errors[] = "La ubicación del archivo no estaba disponible.";
       return false;
     elseif(!is_writable($this->productPath)):
-      $this->errors[] = $this->productPath." Must be writable!!!.";
+      $this->errors[] = $this->productPath." ¡Debes tener permisos de escritura!";
       return false;
     elseif(file_exists($this->productPath."/".$this->fileName)):
-      $this->errors[] = "The file {$this->fileName} already exists.";
+      $this->errors[] = "El archivo {$this->fileName} ya existe.";
       return false;
     else:
      return true;
     endif;
  }
  /*--------------------------------------------------------------*/
- /* Function for Process media file
+ /* Función para procesar archivos multimedia
  /*--------------------------------------------------------------*/
   public function process_media(){
     if(!empty($this->errors)){
         return false;
       }
     if(empty($this->fileName) || empty($this->fileTempPath)){
-        $this->errors[] = "The file location was not available.";
+        $this->errors[] = "La ubicación del archivo no estaba disponible.";
         return false;
       }
 
     if(!is_writable($this->productPath)){
-        $this->errors[] = $this->productPath." Must be writable!!!.";
+        $this->errors[] = $this->productPath." ¡Debes tener permisos de escritura!";
         return false;
       }
 
     if(file_exists($this->productPath."/".$this->fileName)){
-      $this->errors[] = "The file {$this->fileName} already exists.";
+      $this->errors[] = "El archivo {$this->fileName} ya existe.";
       return false;
     }
 
@@ -105,13 +105,13 @@ class  Media {
 
     } else {
 
-      $this->errors[] = "The file upload failed, possibly due to incorrect permissions on the upload folder.";
+      $this->errors[] = "La carga del archivo falló, posiblemente debido a permisos incorrectos en la carpeta de carga.";
       return false;
     }
 
   }
   /*--------------------------------------------------------------*/
-  /* Function for Process user image
+  /* Función para procesar la imagen del usuario
   /*--------------------------------------------------------------*/
  public function process_user($id){
 
@@ -119,15 +119,15 @@ class  Media {
         return false;
       }
     if(empty($this->fileName) || empty($this->fileTempPath)){
-        $this->errors[] = "The file location was not available.";
+        $this->errors[] = "La ubicación del archivo no estaba disponible.";
         return false;
       }
     if(!is_writable($this->userPath)){
-        $this->errors[] = $this->userPath." Must be writable!!!.";
+        $this->errors[] = $this->userPath." ¡Debes tener permisos de escritura!";
         return false;
       }
     if(!$id){
-      $this->errors[] = " Missing user id.";
+      $this->errors[] = "Falta el ID del usuario.";
       return false;
     }
     $ext = explode(".",$this->fileName);
@@ -144,13 +144,13 @@ class  Media {
          }
 
        } else {
-         $this->errors[] = "The file upload failed, possibly due to incorrect permissions on the upload folder.";
+         $this->errors[] = "La carga del archivo falló, posiblemente debido a permisos incorrectos en la carpeta de carga.";
          return false;
        }
     }
  }
  /*--------------------------------------------------------------*/
- /* Function for Update user image
+ /* Función para actualizar la imagen del usuario
  /*--------------------------------------------------------------*/
   private function update_userImg($id){
      global $db;
@@ -162,7 +162,7 @@ class  Media {
 
    }
  /*--------------------------------------------------------------*/
- /* Function for Delete old image
+ /* Función para eliminar la imagen antigua
  /*--------------------------------------------------------------*/
   public function user_image_destroy($id){
      $image = find_by_id('users',$id);
@@ -176,7 +176,7 @@ class  Media {
 
    }
 /*--------------------------------------------------------------*/
-/* Function for insert media image
+/* Función para insertar imagen multimedia
 /*--------------------------------------------------------------*/
   private function insert_media(){
 
@@ -191,23 +191,23 @@ class  Media {
 
   }
 /*--------------------------------------------------------------*/
-/* Function for Delete media by id
+/* Función para eliminar multimedia por ID
 /*--------------------------------------------------------------*/
    public function media_destroy($id,$file_name){
      $this->fileName = $file_name;
      if(empty($this->fileName)){
-         $this->errors[] = "The Photo file Name missing.";
+         $this->errors[] = "Falta el nombre del archivo de la foto.";
          return false;
        }
      if(!$id){
-       $this->errors[] = "Missing Photo id.";
+       $this->errors[] = "Falta el ID de la foto.";
        return false;
      }
      if(delete_by_id('media',$id)){
          unlink($this->productPath.'/'.$this->fileName);
          return true;
      } else {
-       $this->error[] = "Photo deletion failed Or Missing Prm.";
+       $this->error[] = "La eliminación de la foto falló o faltan parámetros.";
        return false;
      }
 

@@ -1,104 +1,126 @@
 <?php
 require_once(LIB_PATH_INC.DS."config.php");
 
-class MySqli_DB {
+class Database {
 
-    private $con;
-    public $query_id;
+    private $pdo;
+    public $stmt;
 
     function __construct() {
       $this->db_connect();
     }
 
 /*--------------------------------------------------------------*/
-/* Function for Open database connection
+/* Función para abrir la conexión a la base de datos (PDO)
 /*--------------------------------------------------------------*/
 public function db_connect()
 {
-  $this->con = mysqli_connect(DB_HOST,DB_USER,DB_PASS);
-  if(!$this->con)
-         {
-           die(" Database connection failed:". mysqli_connect_error());
-         } else {
-           $select_db = $this->con->select_db(DB_NAME);
-             if(!$select_db)
-             {
-               die("Failed to Select Database". mysqli_connect_error());
-             }
-         }
-}
-/*--------------------------------------------------------------*/
-/* Function for Close database connection
-/*--------------------------------------------------------------*/
-
-public function db_disconnect()
-{
-  if(isset($this->con))
-  {
-    mysqli_close($this->con);
-    unset($this->con);
+  try {
+    $dsn = "mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=utf8mb4";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+    $this->pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+  } catch (\PDOException $e) {
+     $error_message = $e->getMessage();
+     // Buscamos el archivo db_error.php en la raíz
+     $error_page = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'db_error.php';
+     if (file_exists($error_page)) {
+         include($error_page);
+     } else {
+         die("La conexión a la base de datos falló: " . $error_message);
+     }
+     exit;
   }
 }
+
 /*--------------------------------------------------------------*/
-/* Function for mysqli query
+/* Función para cerrar la conexión a la base de datos
+/*--------------------------------------------------------------*/
+public function db_disconnect()
+{
+  $this->pdo = null;
+}
+
+/*--------------------------------------------------------------*/
+/* Función para ejecutar consultas (Soporta consultas directas)
 /*--------------------------------------------------------------*/
 public function query($sql)
-   {
-
-      if (trim($sql != "")) {
-          $this->query_id = $this->con->query($sql);
-      }
-      if (!$this->query_id)
-        // only for Develope mode
-              die("Error on this Query :<pre> " . $sql ."</pre>");
-       // For production mode
-        //  die("Error on Query");
-
-       return $this->query_id;
-
-   }
+{
+  try {
+    if (trim($sql) != "") {
+        $this->stmt = $this->pdo->query($sql);
+    }
+    return $this->stmt;
+  } catch (\PDOException $e) {
+     // Solo para modo desarrollo
+     die("Error en esta consulta :<pre> " . $sql ."</pre><br>Error: " . $e->getMessage());
+  }
+}
 
 /*--------------------------------------------------------------*/
-/* Function for Query Helper
+/* Función para consultas preparadas (Seguridad mejorada)
+/*--------------------------------------------------------------*/
+public function query_prepared($sql, $params = [])
+{
+  try {
+    $this->stmt = $this->pdo->prepare($sql);
+    $this->stmt->execute($params);
+    return $this->stmt;
+  } catch (\PDOException $e) {
+    die("Error en consulta preparada: <pre>" . $sql . "</pre><br>Error: " . $e->getMessage());
+  }
+}
+
+/*--------------------------------------------------------------*/
+/* Funciones auxiliares para compatibilidad
 /*--------------------------------------------------------------*/
 public function fetch_array($statement)
 {
-  return mysqli_fetch_array($statement);
+  return $statement->fetch(PDO::FETCH_BOTH);
 }
+
 public function fetch_object($statement)
 {
-  return mysqli_fetch_object($statement);
+  return $statement->fetch(PDO::FETCH_OBJ);
 }
+
 public function fetch_assoc($statement)
 {
-  return mysqli_fetch_assoc($statement);
+  return $statement->fetch(PDO::FETCH_ASSOC);
 }
+
 public function num_rows($statement)
 {
-  return mysqli_num_rows($statement);
+  return $statement->rowCount();
 }
+
 public function insert_id()
 {
-  return mysqli_insert_id($this->con);
+  return $this->pdo->lastInsertId();
 }
+
 public function affected_rows()
 {
-  return mysqli_affected_rows($this->con);
+  return $this->stmt ? $this->stmt->rowCount() : 0;
 }
+
 /*--------------------------------------------------------------*/
- /* Function for Remove escapes special
- /* characters in a string for use in an SQL statement
- /*--------------------------------------------------------------*/
+/* Función para escapar (Legacy - El uso de PDO lo hace redundante)
+/*--------------------------------------------------------------*/
  public function escape($str){
-   return $this->con->real_escape_string($str);
+   // Todavía lo mantenemos para compatibilidad con código antiguo
+   return $str !== null ? str_replace(["\\", "\x00", "\n", "\r", "'", '"', "\x1a"], ["\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z"], $str) : null;
  }
+
 /*--------------------------------------------------------------*/
-/* Function for while loop
+/* Función para bucle while
 /*--------------------------------------------------------------*/
 public function while_loop($loop){
- global $db;
    $results = array();
-   while ($result = $this->fetch_array($loop)) {
+   while ($result = $this->fetch_assoc($loop)) {
       $results[] = $result;
    }
  return $results;
@@ -106,6 +128,6 @@ public function while_loop($loop){
 
 }
 
-$db = new MySqli_DB();
+$db = new Database();
 
 ?>

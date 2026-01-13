@@ -1,17 +1,15 @@
 <?php
- $errors = array();
+  $errors = array();
 
- /*--------------------------------------------------------------*/
- /* Function for Remove escapes special
- /* characters in a string for use in an SQL statement
- /*--------------------------------------------------------------*/
+  /*--------------------------------------------------------------*/
+  /* Función para eliminar caracteres especiales para SQL
+  /*--------------------------------------------------------------*/
 function real_escape($str){
-  global $con;
-  $escape = mysqli_real_escape_string($con,$str);
-  return $escape;
+  global $db;
+  return $db->escape($str);
 }
 /*--------------------------------------------------------------*/
-/* Function for Remove html characters
+/* Función para eliminar caracteres HTML
 /*--------------------------------------------------------------*/
 function remove_junk($str){
   $str = nl2br($str);
@@ -19,7 +17,7 @@ function remove_junk($str){
   return $str;
 }
 /*--------------------------------------------------------------*/
-/* Function for Uppercase first character
+/* Función para poner en mayúscula la primera letra
 /*--------------------------------------------------------------*/
 function first_character($str){
   $val = str_replace('-'," ",$str);
@@ -27,21 +25,20 @@ function first_character($str){
   return $val;
 }
 /*--------------------------------------------------------------*/
-/* Function for Checking input fields not empty
+/* Función para validar campos no vacíos
 /*--------------------------------------------------------------*/
 function validate_fields($var){
   global $errors;
   foreach ($var as $field) {
     $val = remove_junk($_POST[$field]);
     if(isset($val) && $val==''){
-      $errors = $field ." can't be blank.";
+      $errors = $field ." no puede estar vacío.";
       return $errors;
     }
   }
 }
 /*--------------------------------------------------------------*/
-/* Function for Display Session Message
-   Ex echo displayt_msg($message);
+/* Función para mostrar mensajes de sesión
 /*--------------------------------------------------------------*/
 function display_msg($msg =''){
    $output = array();
@@ -58,7 +55,7 @@ function display_msg($msg =''){
    }
 }
 /*--------------------------------------------------------------*/
-/* Function for redirect
+/* Función para redirección
 /*--------------------------------------------------------------*/
 function redirect($url, $permanent = false)
 {
@@ -70,7 +67,7 @@ function redirect($url, $permanent = false)
     exit();
 }
 /*--------------------------------------------------------------*/
-/* Function for find out total saleing price, buying price and profit
+/* Función para calcular precio total, precio de compra y beneficio
 /*--------------------------------------------------------------*/
 function total_price($totals){
    $sum = 0;
@@ -83,7 +80,7 @@ function total_price($totals){
    return array($sum,$profit);
 }
 /*--------------------------------------------------------------*/
-/* Function for Readable date time
+/* Función para fecha legible
 /*--------------------------------------------------------------*/
 function read_date($str){
      if($str)
@@ -92,20 +89,20 @@ function read_date($str){
       return null;
   }
 /*--------------------------------------------------------------*/
-/* Function for  Readable Make date time
+/* Función para generar fecha actual
 /*--------------------------------------------------------------*/
 function make_date(){
   return strftime("%Y-%m-%d %H:%M:%S", time());
 }
 /*--------------------------------------------------------------*/
-/* Function for  Readable date time
+/* Función para contar ID
 /*--------------------------------------------------------------*/
 function count_id(){
   static $count = 1;
   return $count++;
 }
 /*--------------------------------------------------------------*/
-/* Function for Creting random string
+/* Función para crear cadena aleatoria
 /*--------------------------------------------------------------*/
 function randString($length = 5)
 {
@@ -118,4 +115,23 @@ function randString($length = 5)
 }
 
 
+/*--------------------------------------------------------------*/
+/* Función para generar campo oculto CSRF
+/*--------------------------------------------------------------*/
+function csrf_field() {
+  global $session;
+  return '<input type="hidden" name="csrf_token" value="' . $session->generate_csrf_token() . '">';
+}
+
+/*--------------------------------------------------------------*/
+/* Función para verificar token CSRF en peticiones POST
+/*--------------------------------------------------------------*/
+function csrf_verify() {
+  global $session;
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token']) || !$session->validate_csrf_token($_POST['csrf_token'])) {
+      die("¡Error de validación CSRF! La petición fue bloqueada por seguridad.");
+    }
+  }
+}
 ?>

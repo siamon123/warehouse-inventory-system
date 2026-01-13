@@ -51,6 +51,23 @@ class Session {
       $this->msg;
     }
   }
+
+  /*--------------------------------------------------------------*/
+  /* Métodos para protección CSRF
+  /*--------------------------------------------------------------*/
+  public function generate_csrf_token() {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+  }
+
+  public function validate_csrf_token($token) {
+    if (isset($_SESSION['csrf_token']) && $token === $_SESSION['csrf_token']) {
+        return true;
+    }
+    return false;
+  }
 }
 
 $session = new Session();

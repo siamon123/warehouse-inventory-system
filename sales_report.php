@@ -18,6 +18,7 @@ $page_title = 'Sale Report';
       </div>
       <div class="panel-body">
           <form class="clearfix" method="post" action="sale_report_process.php">
+            <?php echo csrf_field(); ?>
             <div class="form-group">
               <label class="form-label">Date Range</label>
                 <div class="input-group">

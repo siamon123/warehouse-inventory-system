@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="test-token" />
+    <title>Demo Responsive - Sistema de Inventario</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="libs/css/main.css" />
+
+    <style>
+      /* Demo specific styles */
+      .demo-info {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        font-size: 12px;
+        max-width: 200px;
+      }
+
+      @media (max-width: 768px) {
+        .demo-info {
+          bottom: 10px;
+          right: 10px;
+          padding: 10px 15px;
+          font-size: 11px;
+          max-width: 150px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header id="header">
+      <a href="admin.php" class="logo"> OSWA - INVENTORY </a>
+      <span class="header-date">
+        <i class="fa fa-calendar"></i> Enero 6, 2026 - 4:12 PM
+      </span>
+      <ul class="info-menu list-inline pull-right">
+        <li class="profile">
+          <a href="#" class="toggle" data-toggle="dropdown">
+            <img
+              src="https://ui-avatars.com/api/?name=Admin+User&background=667eea&color=fff"
+              alt="user"
+              class="img-circle"
+            />
+            <span>Admin User <i class="fa fa-angle-down"></i></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="profile.php"> <i class="fa fa-user"></i> Mi Perfil </a>
+            </li>
+            <li>
+              <a href="edit_account.php">
+                <i class="fa fa-cog"></i> Configuración
+              </a>
+            </li>
+            <li class="last">
+              <a href="logout.php">
+                <i class="fa fa-power-off"></i> Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <ul>
+        <li>
+          <a href="admin.php">
+            <i class="fa fa-dashboard"></i>
+            <span>Panel de Control</span>
+          </a>
+        </li>
+        <li>
+          <a href="users.php">
+            <i class="fa fa-users"></i>
+            <span>Gestión de Usuarios</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="submenu-toggle">
+            <i class="fa fa-th-list"></i>
+            <span>Categorías</span>
+          </a>
+          <ul class="submenu">
+            <li><a href="categories.php">Ver Categorías</a></li>
+            <li><a href="add_category.php">Agregar Categoría</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="products.php">
+            <i class="fa fa-shopping-cart"></i>
+            <span>Productos</span>
+          </a>
+        </li>
+        <li>
+          <a href="media.php">
+            <i class="fa fa-image"></i>
+            <span>Media</span>
+          </a>
+        </li>
+        <li>
+          <a href="sales.php">
+            <i class="fa fa-money"></i>
+            <span>Ventas</span>
+          </a>
+        </li>
+        <li>
+          <a href="sales_report.php">
+            <i class="fa fa-bar-chart"></i>
+            <span>Reporte de Ventas</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="page">
+      <div class="container-fluid">
+        <!-- Page Title -->
+        <div class="row">
+          <div class="col-md-12">
+            <h1 style="margin-bottom: 30px; color: #2d3748">
+              <i class="fa fa-dashboard"></i> Dashboard Responsive
+            </h1>
+          </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="row">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel panel-box clearfix">
+              <div class="panel-icon pull-left bg-green">
+                <i class="fa fa-users"></i>
+              </div>
+              <div class="panel-value pull-right">
+                <h2 class="margin-top">3</h2>
+                <p class="text-muted">Usuarios</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel panel-box clearfix">
+              <div class="panel-icon pull-left bg-red">
+                <i class="fa fa-th-list"></i>
+              </div>
+              <div class="panel-value pull-right">
+                <h2 class="margin-top">5</h2>
+                <p class="text-muted">Categorías</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel panel-box clearfix">
+              <div class="panel-icon pull-left bg-blue">
+                <i class="fa fa-shopping-cart"></i>
+              </div>
+              <div class="panel-value pull-right">
+                <h2 class="margin-top">12</h2>
+                <p class="text-muted">Productos</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel panel-box clearfix">
+              <div class="panel-icon pull-left bg-yellow">
+                <i class="fa fa-money"></i>
+              </div>
+              <div class="panel-value pull-right">
+                <h2 class="margin-top">8</h2>
+                <p class="text-muted">Ventas</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Products -->
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fa fa-shopping-cart"></i> Productos Recientes
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td data-label="Producto">Laptop Dell XPS 15</td>
+                        <td data-label="Categoría">Electrónica</td>
+                        <td data-label="Precio">$1,299.99</td>
+                        <td data-label="Stock">15</td>
+                      </tr>
+                      <tr>
+                        <td data-label="Producto">Mouse Logitech MX</td>
+                        <td data-label="Categoría">Accesorios</td>
+                        <td data-label="Precio">$99.99</td>
+                        <td data-label="Stock">50</td>
+                      </tr>
+                      <tr>
+                        <td data-label="Producto">Teclado Mecánico</td>
+                        <td data-label="Categoría">Accesorios</td>
+                        <td data-label="Precio">$149.99</td>
+                        <td data-label="Stock">30</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fa fa-money"></i> Últimas Ventas
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td data-label="Cliente">Juan Pérez</td>
+                        <td data-label="Producto">Laptop Dell</td>
+                        <td data-label="Fecha">2026-01-06</td>
+                        <td data-label="Total">$1,299.99</td>
+                      </tr>
+                      <tr>
+                        <td data-label="Cliente">María García</td>
+                        <td data-label="Producto">Mouse Logitech</td>
+                        <td data-label="Fecha">2026-01-05</td>
+                        <td data-label="Total">$99.99</td>
+                      </tr>
+                      <tr>
+                        <td data-label="Cliente">Carlos López</td>
+                        <td data-label="Producto">Teclado Mecánico</td>
+                        <td data-label="Fecha">2026-01-04</td>
+                        <td data-label="Total">$149.99</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Form -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fa fa-edit"></i> Formulario de Ejemplo
+              </div>
+              <div class="panel-body">
+                <form>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Nombre del Producto</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Ingrese el nombre"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Categoría</label>
+                        <select class="form-control">
+                          <option>Seleccione una categoría</option>
+                          <option>Electrónica</option>
+                          <option>Accesorios</option>
+                          <option>Software</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Precio</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          placeholder="0.00"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Stock</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          placeholder="0"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Código</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="SKU-000"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fa fa-save"></i> Guardar
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                      <i class="fa fa-times"></i> Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo Info Badge -->
+    <div class="demo-info">
+      <strong>📱 Modo Responsive</strong><br />
+      Redimensiona la ventana o abre en móvil para ver el diseño adaptativo
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="libs/js/functions.js"></script>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap");
+
+:root {
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-red: #ef4444;
+  --accent-glow: rgba(239, 68, 68, 0.2);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Outfit", sans-serif;
+  background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  padding: 3rem;
+  background: var(--card-bg);
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
+  max-width: 500px;
+  width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.icon-wrapper {
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.icon {
+  font-size: 80px;
+  color: var(--accent-red);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px var(--accent-red));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 15px var(--accent-red));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px var(--accent-red));
+  }
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+}
+
+.error-details {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 12px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #fca5a5;
+  margin-bottom: 2rem;
+  text-align: left;
+  border: 1px border dashed rgba(239, 68, 68, 0.3);
+  word-break: break-all;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.8rem 2.5rem;
+  background: var(--accent-red);
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  background: #dc2626;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
