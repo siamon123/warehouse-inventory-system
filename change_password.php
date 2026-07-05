@@ -1,7 +1,7 @@
 <?php
-  $page_title = 'Change Password';
+  $page_title = 'Cambiar contraseña';
   require_once('includes/load.php');
-  // Checkin What level user has permission to view this page
+  // Comprobar qué nivel de usuario tiene permiso para ver esta página
   page_require_level(3);
 ?>
 <?php $user = current_user(); ?>
@@ -13,21 +13,21 @@
 
     if(empty($errors)){
 
-             if(sha1($_POST['old-password']) !== current_user()['password'] ){
-               $session->msg('d', "Your old password not match");
+             if(!password_verify($_POST['old-password'], current_user()['password']) && sha1($_POST['old-password']) !== current_user()['password']){
+               $session->msg('d', "Tu contraseña antigua no coincide");
                redirect('change_password.php',false);
              }
 
             $id = (int)$_POST['id'];
-            $new = remove_junk($db->escape(sha1($_POST['new-password'])));
-            $sql = "UPDATE users SET password ='{$new}' WHERE id='{$db->escape($id)}'";
+            $new_password = password_hash($_POST['new-password'], PASSWORD_DEFAULT);
+            $sql = "UPDATE users SET password ='{$db->escape($new_password)}' WHERE id='{$db->escape($id)}'";
             $result = $db->query($sql);
                 if($result && $db->affected_rows() === 1):
                   $session->logout();
-                  $session->msg('s',"Login with your new password.");
+                  $session->msg('s',"Inicie sesión con su nueva contraseña.");
                   redirect('index.php', false);
                 else:
-                  $session->msg('d',' Sorry failed to updated!');
+                  $session->msg('d',' ¡Lo sentimos, falló la actualización!');
                   redirect('change_password.php', false);
                 endif;
     } else {
@@ -39,21 +39,22 @@
 <?php include_once('layouts/header.php'); ?>
 <div class="login-page">
     <div class="text-center">
-       <h3>Change your password</h3>
+       <h3>Cambiar su contraseña</h3>
      </div>
      <?php echo display_msg($msg); ?>
       <form method="post" action="change_password.php" class="clearfix">
+        <?php echo csrf_field(); ?>
         <div class="form-group">
-              <label for="newPassword" class="control-label">New password</label>
-              <input type="password" class="form-control" name="new-password" placeholder="New password">
+              <label for="newPassword" class="control-label">Nueva contraseña</label>
+              <input type="password" class="form-control" name="new-password" placeholder="Nueva contraseña">
         </div>
         <div class="form-group">
-              <label for="oldPassword" class="control-label">Old password</label>
-              <input type="password" class="form-control" name="old-password" placeholder="Old password">
+              <label for="oldPassword" class="control-label">Contraseña antigua</label>
+              <input type="password" class="form-control" name="old-password" placeholder="Contraseña antigua">
         </div>
         <div class="form-group clearfix">
                <input type="hidden" name="id" value="<?php echo (int)$user['id'];?>">
-                <button type="submit" name="update" class="btn btn-info">Change</button>
+                <button type="submit" name="update" class="btn btn-info">Cambiar</button>
         </div>
     </form>
 </div>

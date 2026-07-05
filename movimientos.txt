@@ -1,0 +1,42 @@
+Desde una perspectiva de metodología de desarrollo moderna y considerando las mejores prácticas actuales en PHP, el código actual de OSWA-INV es funcional pero tiene varias áreas de oportunidad críticas que podrían mejorar drásticamente su seguridad, mantenibilidad y escalabilidad.
+
+Aquí tienes mis recomendaciones de cambios metodológicos:
+
+1. Seguridad Crítica: Hash de Contraseñas
+Situación actual: El sistema utiliza sha1(), el cual es un algoritmo obsoleto y vulnerable a ataques de fuerza bruta.
+Recomendación: Cambiar a la API nativa de PHP: password_hash() y password_verify(). Esto utiliza Bcrypt o Argon2, que incorporan "salts" automáticos y son mucho más seguros.
+2. Arquitectura: Separación de Responsabilidades (MVC)
+Situación actual: La lógica de negocio (consultas SQL), la lógica de control (procesamiento de formularios) y la presentación (HTML) están mezcladas en un solo archivo (ej. 
+edit_user.php
+).
+Recomendación: Implementar un patrón MVC (Modelo-Vista-Controlador).
+Modelos: Clases que solo manejen datos y consultas.
+Controladores: Procesan la lógica y envían datos a la vista.
+Vistas: Archivos de plantilla (puedes usar un motor como Twig o Blade) que solo contengan HTML y variables.
+3. Gestión de Base de Datos: PDO y Sentencias Preparadas
+Situación actual: Se usa mysqli con concatenación de strings y escape manual ($db->escape). Aunque el escape ayuda, no es infalible contra Inyección SQL comparado con las sentencias preparadas.
+Recomendación: Migrar a PDO (PHP Data Objects). Las sentencias preparadas separan la consulta de los datos, eliminando prácticamente el riesgo de inyección SQL.
+4. Protección CSRF (Cross-Site Request Forgery)
+Situación actual: Los formularios no parecen tener tokens de validación. Un atacante podría engañar a un administrador para que ejecute acciones sin su consentimiento.
+Recomendación: Generar un token único por sesión y validarlo en cada envío de formulario (POST).
+5. Modernización del Código (Autoloading y Namespaces)
+Situación actual: Se depende de require_once manuales en cada archivo y funciones globales en el espacio de nombres raíz.
+Recomendación:
+Usar Composer para gestionar dependencias y el Autoloading (PSR-4). Esto elimina la necesidad de require_once infinitos.
+Organizar el código en Namespaces para evitar colisiones de nombres y mejorar la legibilidad.
+6. Manejo de Errores y Excepciones
+Situación actual: Se usa mucho die("Error..."), lo cual detiene la ejecución de forma abrupta y no es profesional para el usuario final.
+Recomendación: Implementar Try-Catch blocks y un manejador global de excepciones. Esto permite registrar errores en un archivo log y mostrar una página de error amigable al usuario.
+7. Validación de Datos Centralizada
+Situación actual: La validación es muy básica (solo comprueba si el campo existe).
+Recomendación: Crear una clase Validator dedicada que permita reglas más complejas (ej. email, min_length, unique_in_db).
+8. Control de Acceso (Middleware)
+Situación actual: El chequeo de permisos (
+page_require_level
+) está pegado al inicio de cada archivo.
+Recomendación: Si se usa un enrutador centralizado, se pueden usar "Middlewares" que intercepten la petición antes de llegar al controlador, haciendo que el código sea mucho más limpio.
+¿Por dónde empezaría yo? Si quieres ir paso a paso, lo más urgente es la seguridad:
+
+Actualizar el hasheo de contraseñas.
+Implementar sentencias preparadas (PDO) para evitar sustos con la base de datos.
+¿Te gustaría que te ayude a refactorizar alguna de estas partes, por ejemplo, mejorar el sistema de contraseñas o limpiar un archivo siguiendo el patrón MVC?

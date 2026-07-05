@@ -1,0 +1,20 @@
+{
+  "name": "siamon123/warehouse-inventory-system",
+  "description": "Warehouse Inventory System",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Antigravity",
+      "email": "antigravity@example.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
