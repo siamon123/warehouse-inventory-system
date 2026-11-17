@@ -48,7 +48,7 @@ class  Media {
       return false;
     else:
       $this->imageInfo = getimagesize($file['tmp_name']);
-      $this->fileName  = basename($file['name']);
+      $this->fileName  = preg_replace('/[^A-Za-z0-9._-]/', '_', basename($file['name']));
       $this->fileType  = $this->imageInfo['mime'];
       $this->fileTempPath = $file['tmp_name'];
      return true;
